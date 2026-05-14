@@ -1,0 +1,5 @@
+{
+  "name": "Burger Creator 2D",
+  "description": "A 2D vector-based burger assembler with swipeable ingredient layers, responsive stacking, and isometric SVGs.",
+  "requestFramePermissions": []
+}

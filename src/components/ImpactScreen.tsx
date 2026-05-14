@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Skull } from 'lucide-react';
 import { BURGER_SLOTS, INGREDIENTS } from '../data/ingredients';
 import { IMPACT_DATA, STAT_META, COMPARISON, StatKey } from '../data/impact';
 import { SvgMap } from './ingredients/IngredientLibrary';
@@ -10,6 +10,7 @@ const STAT_KEYS: StatKey[] = ['co2', 'water', 'land', 'methane'];
 interface ImpactScreenProps {
   burgerState: Record<string, string | null>;
   onBack: () => void;
+  onViewDeaths: () => void;
 }
 
 const IngredientThumbnail = ({ ingredientId, isTopBun, isBottomBun }: { ingredientId: string; isTopBun?: boolean; isBottomBun?: boolean }) => {
@@ -26,7 +27,7 @@ const IngredientThumbnail = ({ ingredientId, isTopBun, isBottomBun }: { ingredie
   );
 };
 
-export const ImpactScreen = ({ burgerState, onBack }: ImpactScreenProps) => {
+export const ImpactScreen = ({ burgerState, onBack, onViewDeaths }: ImpactScreenProps) => {
   const [activeStat, setActiveStat] = useState<StatKey>('co2');
 
   const activeRows = BURGER_SLOTS.filter(s => burgerState[s.id] !== null);
@@ -152,8 +153,15 @@ export const ImpactScreen = ({ burgerState, onBack }: ImpactScreenProps) => {
         </div>
         <p className="text-xs text-zinc-500 mt-1 leading-snug">{comparisonText}</p>
         <button
+          onClick={onViewDeaths}
+          className="mt-4 w-full py-2.5 bg-red-950/30 border border-red-900/50 text-red-400 text-xs font-bold rounded-xl hover:bg-red-950/50 transition-colors flex items-center justify-center gap-1.5"
+        >
+          <Skull size={11} />
+          SEE THE ANIMAL TOLL →
+        </button>
+        <button
           onClick={onBack}
-          className="mt-4 inline-flex items-center gap-2 px-5 py-2 border border-zinc-700 text-zinc-300 text-xs font-bold rounded-full hover:border-zinc-500 hover:text-zinc-100 transition-colors"
+          className="mt-2 inline-flex items-center gap-2 px-5 py-2 border border-zinc-700 text-zinc-500 text-xs font-bold rounded-full hover:border-zinc-500 hover:text-zinc-300 transition-colors"
         >
           <ArrowLeft size={12} />
           Edit Burger

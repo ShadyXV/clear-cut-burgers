@@ -111,6 +111,55 @@ const CrispyChicken = () => (
   />
 );
 
+const BlackBeanPatty = () => (
+  <IsometricBase
+    thickness={14}
+    front="#2E2218"
+    top="#4A382A"
+    specks={
+      <g>
+        {/* Dark bean halves — pressed into the surface */}
+        <g fill="#1A0F08">
+          <ellipse cx="80"  cy="75" rx="6" ry="3" transform="rotate(-12 80 75)" />
+          <ellipse cx="115" cy="62" rx="7" ry="3.5" transform="rotate(18 115 62)" />
+          <ellipse cx="160" cy="55" rx="6" ry="3" transform="rotate(-8 160 55)" />
+          <ellipse cx="210" cy="60" rx="7" ry="3.5" transform="rotate(22 210 60)" />
+          <ellipse cx="245" cy="78" rx="6" ry="3" transform="rotate(-15 245 78)" />
+          <ellipse cx="95"  cy="92" rx="6" ry="3" transform="rotate(8 95 92)" />
+          <ellipse cx="140" cy="86" rx="7" ry="3.5" transform="rotate(-20 140 86)" />
+          <ellipse cx="195" cy="92" rx="6" ry="3" transform="rotate(15 195 92)" />
+          <ellipse cx="225" cy="95" rx="5" ry="2.5" transform="rotate(-5 225 95)" />
+        </g>
+        {/* Bean highlights — gives them dimension */}
+        <g fill="#5C4632" opacity="0.6">
+          <ellipse cx="80"  cy="74" rx="3" ry="1.2" transform="rotate(-12 80 74)" />
+          <ellipse cx="115" cy="61" rx="3.5" ry="1.5" transform="rotate(18 115 61)" />
+          <ellipse cx="160" cy="54" rx="3" ry="1.2" transform="rotate(-8 160 54)" />
+          <ellipse cx="210" cy="59" rx="3.5" ry="1.5" transform="rotate(22 210 59)" />
+          <ellipse cx="140" cy="85" rx="3.5" ry="1.5" transform="rotate(-20 140 85)" />
+        </g>
+        {/* Herb flecks (parsley/cilantro) — green accents */}
+        <g fill="#4A7822" opacity="0.7">
+          <circle cx="100" cy="68" r="1.2" />
+          <circle cx="175" cy="72" r="1" />
+          <circle cx="225" cy="68" r="1.2" />
+          <circle cx="125" cy="98" r="1" />
+          <circle cx="180" cy="100" r="1.2" />
+          <circle cx="60" cy="85" r="1" />
+        </g>
+        {/* Light grain (corn/breadcrumb texture) */}
+        <g fill="#8A6F4A" opacity="0.4">
+          <circle cx="130" cy="68" r="0.8" />
+          <circle cx="185" cy="62" r="0.8" />
+          <circle cx="155" cy="95" r="0.8" />
+          <circle cx="105" cy="80" r="0.8" />
+          <circle cx="240" cy="88" r="0.8" />
+        </g>
+      </g>
+    }
+  />
+);
+
 // --- Cheese Components ---
 const Cheddar = () => <CheeseBase fill="#FDB813" droopFill="#E59400" />;
 const Emmental = () => <CheeseBase fill="#FFF3B0" droopFill="#D4C882" holes />;
@@ -360,6 +409,7 @@ export const SvgMap: Record<string, React.FC<any>> = {
   beefPatty: BeefPatty,
   grilledChicken: GrilledChicken,
   crispyChicken: CrispyChicken,
+  blackBeanPatty: BlackBeanPatty,
 
   cheddar: Cheddar,
   emmental: Emmental,

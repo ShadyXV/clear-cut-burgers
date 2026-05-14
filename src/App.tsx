@@ -9,13 +9,18 @@ import { BurgerStack } from './components/BurgerStack';
 import { BurgerEditor } from './components/BurgerEditor';
 import { ImpactScreen } from './components/ImpactScreen';
 import { AnimalDeathsScreen } from './components/AnimalDeathsScreen';
+import { CheckoutTransition } from './components/CheckoutTransition';
 import { SlotKey } from './data/ingredients';
 
-type AppView = 'builder' | 'impact' | 'deaths';
+type AppView = 'builder' | 'checkoutTransition' | 'impact' | 'deaths';
 
-// Each view has a numeric depth; higher = further right in the hierarchy.
-// Transitions slide in from the right when advancing and exit right when going back.
-const VIEW_DEPTH: Record<AppView, number> = { builder: 0, impact: 1, deaths: 2 };
+// View depth controls slide direction for horizontal page transitions.
+const VIEW_DEPTH: Record<AppView, number> = {
+  builder: 0,
+  checkoutTransition: 0.5,
+  impact: 1,
+  deaths: 2,
+};
 
 export default function App() {
   const [direction, setDirection] = useState(1);
@@ -45,6 +50,9 @@ export default function App() {
 
   const slideDir = VIEW_DEPTH[view] > VIEW_DEPTH[prevView] ? 1 : -1;
 
+  // When Impact is entered from the cinematic, fade-in (no slide).
+  const impactFromCinematic = prevView === 'checkoutTransition';
+
   const handleSlotChange = (slotId: SlotKey, val: string | null, dir: number) => {
     setDirection(dir);
     setBurgerState(prev => ({
@@ -70,8 +78,15 @@ export default function App() {
             2D RENDER ENGINE ACTIVE
           </div>
           <button
-            onClick={() => navigateTo(view === 'builder' ? 'impact' : 'builder')}
-            className="px-5 py-2 bg-zinc-100 text-zinc-950 rounded-full text-sm font-bold hover:bg-white transition-colors"
+            onClick={() => {
+              if (view === 'builder') {
+                navigateTo('checkoutTransition');
+              } else {
+                navigateTo('builder');
+              }
+            }}
+            disabled={view === 'checkoutTransition'}
+            className="px-5 py-2 bg-zinc-100 text-zinc-950 rounded-full text-sm font-bold hover:bg-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {navLabel}
           </button>
@@ -109,20 +124,41 @@ export default function App() {
             </motion.div>
           )}
 
+          {view === 'checkoutTransition' && (
+            <motion.div
+              key="checkoutTransition"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="absolute inset-0 z-40"
+            >
+              <CheckoutTransition
+                burgerState={burgerState}
+                onComplete={() => navigateTo('impact')}
+              />
+            </motion.div>
+          )}
+
           {view === 'impact' && (
             <motion.div
               key="impact"
               custom={slideDir}
-              initial={{ x: `${slideDir * 100}%`, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
+              initial={impactFromCinematic ? { opacity: 0 } : { x: `${slideDir * 100}%`, opacity: 0 }}
+              animate={{ opacity: 1, x: 0 }}
               exit={{ x: `${slideDir * -100}%`, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 260, damping: 28 }}
+              transition={
+                impactFromCinematic
+                  ? { duration: 0.55 }
+                  : { type: 'spring', stiffness: 260, damping: 28 }
+              }
               className="absolute inset-0"
             >
               <ImpactScreen
                 burgerState={burgerState}
                 onBack={() => navigateTo('builder')}
                 onViewDeaths={() => navigateTo('deaths')}
+                stagedEntry={impactFromCinematic}
               />
             </motion.div>
           )}
@@ -140,6 +176,10 @@ export default function App() {
               <AnimalDeathsScreen
                 burgerState={burgerState}
                 onBack={() => navigateTo('impact')}
+                onSwitchToPlant={() => {
+                  setBurgerState(prev => ({ ...prev, protein1: 'blackBeanPatty' }));
+                  navigateTo('builder');
+                }}
               />
             </motion.div>
           )}

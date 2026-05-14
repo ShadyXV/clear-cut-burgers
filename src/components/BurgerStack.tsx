@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { IngredientSvg } from './ingredients/IngredientLibrary';
 import { BURGER_SLOTS, INGREDIENTS } from '../data/ingredients';
 
-export const BurgerStack = ({ burgerState, direction, isAssembled = false }: { burgerState: Record<string, string | null>, direction: number, isAssembled?: boolean }) => {
+export const BurgerStack = ({ burgerState, direction, isAssembled = false, isCompact = false }: { burgerState: Record<string, string | null>, direction: number, isAssembled?: boolean, isCompact?: boolean }) => {
 
   const slideVariants = {
     enter: (dir: number) => ({
@@ -26,7 +26,7 @@ export const BurgerStack = ({ burgerState, direction, isAssembled = false }: { b
   };
 
   return (
-    <div className={`relative w-[340px] h-full flex flex-col items-center justify-end overflow-visible pt-32 pb-16 transition-all duration-700 ease-in-out ${isAssembled ? 'gap-y-0' : 'gap-y-[3.5rem]'}`}>
+    <div className={`relative w-[340px] h-full flex flex-col items-center justify-end overflow-visible transition-all duration-700 ease-in-out ${isCompact ? 'pt-8 pb-6' : 'pt-32 pb-16'} ${isAssembled ? 'gap-y-0' : isCompact ? 'gap-y-[1.2rem]' : 'gap-y-[3.5rem]'}`}>
       <AnimatePresence>
         {BURGER_SLOTS.map((slot, index) => {
           const ingredientId = burgerState[slot.id];

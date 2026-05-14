@@ -63,26 +63,26 @@ export default function App() {
       </nav>
 
       {/* Main Layout Workspace */}
-      <main className="flex-1 flex flex-col md:flex-row overflow-hidden relative z-0">
-        {/* 2D Burger View Canvas */}
-        <div className="flex-1 relative flex items-center justify-center bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-900 to-black overflow-hidden">
+      <main className="flex-1 flex flex-col overflow-hidden relative z-0 min-h-0">
+        {/* Burger Preview */}
+        <div className="h-[44%] shrink-0 relative flex items-center justify-center bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-900 to-black overflow-hidden">
            {/* Background Decoration */}
-           <div className="absolute top-12 left-12">
-              <h1 className="text-5xl font-black italic text-zinc-800 leading-none mb-1">THE GOLIATH</h1>
-              <p className="text-amber-500/50 font-mono text-sm tracking-tighter">ID: #BM-80822-XP</p>
+           <div className="absolute top-4 left-6">
+              <h1 className="text-3xl font-black italic text-zinc-800 leading-none">THE GOLIATH</h1>
+              <p className="text-amber-500/50 font-mono text-xs tracking-tighter">ID: #BM-80822-XP</p>
            </div>
-           <div className="absolute bottom-12 right-12 text-right">
-              <p className="text-xs text-zinc-500 uppercase tracking-widest">Total Nutrition</p>
-              <p className="text-3xl font-bold">1,142 <span className="text-lg font-normal text-zinc-400">KCAL</span></p>
+           <div className="absolute bottom-4 right-6 text-right">
+              <p className="text-[10px] text-zinc-500 uppercase tracking-widest">Nutrition</p>
+              <p className="text-xl font-bold">1,142 <span className="text-sm font-normal text-zinc-400">KCAL</span></p>
            </div>
-  
+
            {/* The Burger */}
-           <div className="relative z-10 w-full h-full flex justify-center items-center">
-               <BurgerStack burgerState={burgerState} direction={direction} isAssembled={isAssembled} />
+           <div className="relative z-10 w-full h-full flex justify-center items-end overflow-hidden">
+               <BurgerStack burgerState={burgerState} direction={direction} isAssembled={isAssembled} isCompact />
            </div>
         </div>
-  
-        {/* Editor Panel */}
+
+        {/* Editor Panel — fills remaining height */}
         <BurgerEditor burgerState={burgerState} onChangeSlot={handleSlotChange} />
       </main>
     </div>

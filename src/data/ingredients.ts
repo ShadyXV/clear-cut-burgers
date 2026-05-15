@@ -204,3 +204,30 @@ export const BURGER_SLOTS: {
   { id: 'sauceBottom', label: 'Bottom Sauce', category: 'sauce' },
   { id: 'bunBottom', label: 'Bottom Bun', category: 'bun', isBottomBun: true },
 ];
+
+export const generateRandomBurgerState = (): Record<string, string | null> => {
+  const getRandom = (arr: string[]) =>
+    arr[Math.floor(Math.random() * arr.length)];
+
+  const bun = getRandom(CATEGORIES.bun);
+  // Exclude vegan/bean patty for the initial "meat" impact
+  const proteins = CATEGORIES.protein.filter((id) => id !== 'blackBeanPatty');
+  const protein = getRandom(proteins);
+
+  return {
+    bunTop: bun,
+    topping6: null,
+    topping5: null,
+    topping4: null,
+    topping3: getRandom(CATEGORIES.topping),
+    topping2: getRandom(CATEGORIES.topping),
+    topping1: getRandom(CATEGORIES.topping),
+    cheese2: null,
+    cheese1: getRandom(CATEGORIES.cheese),
+    protein3: null,
+    protein2: protein,
+    protein1: protein,
+    sauceBottom: getRandom(CATEGORIES.sauce),
+    bunBottom: bun,
+  };
+};

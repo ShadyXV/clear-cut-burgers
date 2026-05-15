@@ -60,6 +60,18 @@ export const INGREDIENTS: Record<string, Ingredient> = {
     category: 'protein',
     thickness: 14,
   },
+  chickpeaPatty: {
+    id: 'chickpeaPatty',
+    name: 'Chickpea Patty',
+    category: 'protein',
+    thickness: 13,
+  },
+  mushroomPatty: {
+    id: 'mushroomPatty',
+    name: 'Mushroom Patty',
+    category: 'protein',
+    thickness: 13,
+  },
 
   // Cheese
   cheddar: { id: 'cheddar', name: 'Cheddar', category: 'cheese', thickness: 3 },
@@ -157,7 +169,7 @@ export const INGREDIENTS: Record<string, Ingredient> = {
 
 export const CATEGORIES: Record<Category, string[]> = {
   bun: ['brioche', 'sesame', 'paprika', 'cheeseTopped', 'chiveSesame'],
-  protein: ['beefPatty', 'grilledChicken', 'crispyChicken', 'blackBeanPatty'],
+  protein: ['beefPatty', 'grilledChicken', 'crispyChicken', 'blackBeanPatty', 'chickpeaPatty', 'mushroomPatty'],
   cheese: ['cheddar', 'emmental', 'mozzarella', 'pepperCheese'],
   topping: [
     'tomato',
@@ -210,8 +222,10 @@ export const generateRandomBurgerState = (): Record<string, string | null> => {
     arr[Math.floor(Math.random() * arr.length)];
 
   const bun = getRandom(CATEGORIES.bun);
-  // Exclude vegan/bean patty for the initial "meat" impact
-  const proteins = CATEGORIES.protein.filter((id) => id !== 'blackBeanPatty');
+  // Exclude vegan patties for the initial "meat" impact
+  const proteins = CATEGORIES.protein.filter(
+    (id) => id !== 'blackBeanPatty' && id !== 'chickpeaPatty' && id !== 'mushroomPatty',
+  );
   const protein = getRandom(proteins);
 
   return {

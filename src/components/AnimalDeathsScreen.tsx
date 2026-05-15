@@ -39,7 +39,10 @@ export const AnimalDeathsScreen = () => {
   );
 
   const proteinId = burgerState.protein1;
-  const isPlantBurger = proteinId === 'blackBeanPatty';
+  const isPlantBurger =
+    proteinId === 'blackBeanPatty' ||
+    proteinId === 'chickpeaPatty' ||
+    proteinId === 'mushroomPatty';
   const phase =
     elapsedSec < 10 ? 1 : elapsedSec < 22 ? 2 : elapsedSec < 40 ? 3 : 4;
   const iconOpacity = phase < 4 ? 1 : Math.max(0.15, 1 - knifeProgress * 1.1);

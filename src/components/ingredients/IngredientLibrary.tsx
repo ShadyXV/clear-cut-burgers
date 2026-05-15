@@ -312,6 +312,117 @@ const BlackBeanPatty = () => (
   />
 );
 
+const ChickpeaPatty = () => (
+  <IsometricBase
+    thickness={13}
+    front="#8B6440"
+    top="#C4A068"
+    specks={
+      <g>
+        {/* Chickpea bumps */}
+        <g fill="#DCBA82">
+          <ellipse cx="75" cy="78" rx="7" ry="3.5" transform="rotate(-8 75 78)" />
+          <ellipse cx="120" cy="65" rx="8" ry="4" transform="rotate(12 120 65)" />
+          <ellipse cx="165" cy="58" rx="7" ry="3.5" transform="rotate(-5 165 58)" />
+          <ellipse cx="215" cy="62" rx="8" ry="4" transform="rotate(15 215 62)" />
+          <ellipse cx="250" cy="75" rx="7" ry="3.5" transform="rotate(-10 250 75)" />
+          <ellipse cx="95" cy="93" rx="7" ry="3.5" transform="rotate(10 95 93)" />
+          <ellipse cx="145" cy="88" rx="8" ry="4" transform="rotate(-18 145 88)" />
+          <ellipse cx="195" cy="90" rx="7" ry="3.5" transform="rotate(8 195 90)" />
+          <ellipse cx="230" cy="95" rx="6" ry="3" transform="rotate(-6 230 95)" />
+        </g>
+        {/* Chickpea highlights */}
+        <g fill="#EDD09A" opacity="0.7">
+          <ellipse cx="75" cy="76" rx="3.5" ry="1.5" transform="rotate(-8 75 76)" />
+          <ellipse cx="120" cy="63" rx="4" ry="1.7" transform="rotate(12 120 63)" />
+          <ellipse cx="165" cy="56" rx="3.5" ry="1.5" transform="rotate(-5 165 56)" />
+          <ellipse cx="215" cy="60" rx="4" ry="1.7" transform="rotate(15 215 60)" />
+          <ellipse cx="145" cy="86" rx="4" ry="1.7" transform="rotate(-18 145 86)" />
+        </g>
+        {/* Dark gaps */}
+        <g fill="#6A4A28" opacity="0.6">
+          <circle cx="98" cy="72" r="2" />
+          <circle cx="143" cy="68" r="1.8" />
+          <circle cx="188" cy="72" r="2" />
+          <circle cx="170" cy="92" r="1.8" />
+          <circle cx="225" cy="82" r="2" />
+        </g>
+        {/* Herb flecks (parsley / coriander) */}
+        <g fill="#527A18" opacity="0.8">
+          <circle cx="105" cy="80" r="1.2" />
+          <circle cx="178" cy="74" r="1" />
+          <circle cx="235" cy="70" r="1.2" />
+          <circle cx="130" cy="100" r="1" />
+          <circle cx="185" cy="102" r="1.2" />
+          <circle cx="62" cy="87" r="1" />
+        </g>
+        {/* Fine grain */}
+        <g fill="#E8C890" opacity="0.35">
+          <circle cx="135" cy="70" r="0.8" />
+          <circle cx="190" cy="64" r="0.8" />
+          <circle cx="158" cy="98" r="0.8" />
+          <circle cx="108" cy="84" r="0.8" />
+          <circle cx="245" cy="88" r="0.8" />
+        </g>
+      </g>
+    }
+  />
+);
+
+const MushroomPatty = () => (
+  <IsometricBase
+    thickness={13}
+    front="#3A2415"
+    top="#5E3C26"
+    specks={
+      <g>
+        {/* Dark mushroom cap fragments */}
+        <g fill="#2A180E" opacity="0.85">
+          <ellipse cx="80" cy="74" rx="8" ry="3.5" transform="rotate(-15 80 74)" />
+          <ellipse cx="130" cy="62" rx="9" ry="4" transform="rotate(20 130 62)" />
+          <ellipse cx="175" cy="56" rx="7" ry="3.2" transform="rotate(-8 175 56)" />
+          <ellipse cx="225" cy="65" rx="8" ry="3.5" transform="rotate(18 225 65)" />
+          <ellipse cx="100" cy="92" rx="7" ry="3" transform="rotate(10 100 92)" />
+          <ellipse cx="150" cy="88" rx="9" ry="4" transform="rotate(-22 150 88)" />
+          <ellipse cx="205" cy="92" rx="7" ry="3.2" transform="rotate(12 205 92)" />
+        </g>
+        {/* Gill-like organic lines */}
+        <g stroke="#2A180E" strokeWidth="1" fill="none" opacity="0.5">
+          <path d="M 70 78 Q 90 70 110 82" />
+          <path d="M 120 66 Q 145 56 165 68" />
+          <path d="M 170 60 Q 195 52 215 64" />
+          <path d="M 90 96 Q 115 88 140 98" />
+          <path d="M 155 92 Q 180 82 205 94" />
+        </g>
+        {/* Lighter cap highlights */}
+        <g fill="#8A6040" opacity="0.55">
+          <ellipse cx="80" cy="72" rx="4" ry="1.5" transform="rotate(-15 80 72)" />
+          <ellipse cx="130" cy="60" rx="4.5" ry="1.8" transform="rotate(20 130 60)" />
+          <ellipse cx="175" cy="54" rx="3.5" ry="1.4" transform="rotate(-8 175 54)" />
+          <ellipse cx="150" cy="86" rx="4.5" ry="1.8" transform="rotate(-22 150 86)" />
+        </g>
+        {/* Herb / thyme specks */}
+        <g fill="#48681A" opacity="0.75">
+          <circle cx="110" cy="76" r="1.2" />
+          <circle cx="185" cy="70" r="1" />
+          <circle cx="240" cy="72" r="1.2" />
+          <circle cx="135" cy="100" r="1" />
+          <circle cx="195" cy="100" r="1.2" />
+          <circle cx="65" cy="85" r="1" />
+        </g>
+        {/* Fine spore grain */}
+        <g fill="#7A5A3A" opacity="0.4">
+          <circle cx="140" cy="68" r="0.8" />
+          <circle cx="200" cy="60" r="0.8" />
+          <circle cx="160" cy="96" r="0.8" />
+          <circle cx="115" cy="84" r="0.8" />
+          <circle cx="250" cy="84" r="0.8" />
+        </g>
+      </g>
+    }
+  />
+);
+
 // --- Cheese Components ---
 const Cheddar = () => <CheeseBase fill="#FDB813" droopFill="#E59400" />;
 const Emmental = () => <CheeseBase fill="#FFF3B0" droopFill="#D4C882" holes />;
@@ -620,6 +731,8 @@ export const SvgMap: Record<string, React.FC> = {
   grilledChicken: GrilledChicken,
   crispyChicken: CrispyChicken,
   blackBeanPatty: BlackBeanPatty,
+  chickpeaPatty: ChickpeaPatty,
+  mushroomPatty: MushroomPatty,
 
   cheddar: Cheddar,
   emmental: Emmental,

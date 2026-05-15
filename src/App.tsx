@@ -106,7 +106,7 @@ export default function App() {
               SEE THE ANIMAL TOLL
             </button>
           ) : view === 'deaths' ? (
-            burgerState.protein1 !== 'blackBeanPatty' && (
+            !['blackBeanPatty', 'chickpeaPatty', 'mushroomPatty'].includes(burgerState.protein1 ?? '') && (
               <button
                 onClick={() => {
                   setSlot('protein1', 'blackBeanPatty', 1);

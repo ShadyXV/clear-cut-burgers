@@ -75,6 +75,24 @@ export const IMPACT_DATA: Record<string, ImpactMetric> = {
     trees: 0,
     feed: 0,
   },
+  // Chickpea patty — ~80g chickpeas + binders. Poore & Nemecek: chickpeas 0.9 kgCO2e/kg, 1,236 L/kg, 2.2 m²/kg.
+  chickpeaPatty: {
+    co2: 0.18,
+    water: 75,
+    land: 0.35,
+    methane: 0,
+    trees: 0,
+    feed: 0,
+  },
+  // Mushroom patty — mushrooms have extremely low footprint: ~0.4 kgCO2e/kg, ~100 L/kg, ~0.1 m²/kg.
+  mushroomPatty: {
+    co2: 0.11,
+    water: 32,
+    land: 0.14,
+    methane: 0,
+    trees: 0,
+    feed: 0,
+  },
 
   // Cheese (30g per slice) — corrected upward per Poore & Nemecek 2018
   cheddar: {

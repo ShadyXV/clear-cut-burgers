@@ -4,7 +4,7 @@ import { EASE, DUR, SPRING } from '../constants/animations';
 export const SplashScreen = ({ onStart }: { onStart: () => void }) => (
   <motion.div
     className="absolute inset-0 z-[100] flex flex-col items-center justify-center bg-[#09090b] overflow-hidden"
-    initial={{ opacity: 0 }}
+    initial={{ opacity: 1 }}
     animate={{ opacity: 1 }}
     exit={{ y: '-100%' }}
     transition={{ duration: DUR.SPLASH, ease: EASE.CURTAIN }}

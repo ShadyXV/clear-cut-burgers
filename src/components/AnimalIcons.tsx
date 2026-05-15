@@ -1,3 +1,5 @@
+import React from 'react';
+
 // Minimal silhouette icons for each species — drawn in inline SVG paths.
 // Each icon renders at the size of its viewBox; consumers control display size via wrapper.
 
@@ -91,7 +93,7 @@ export const CowIcon = ({ color = 'currentColor', size = 18 }: IconProps) => (
   </svg>
 );
 
-export const ICONS_BY_SPECIES_ID: Record<string, (props: IconProps) => JSX.Element> = {
+export const ICONS_BY_SPECIES_ID: Record<string, React.FC<IconProps>> = {
   chicken: ChickenIcon,
   ducks:   DuckIcon,
   pigs:    PigIcon,

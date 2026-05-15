@@ -2,165 +2,234 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { BurgerStack } from './BurgerStack';
 
-type Phase = 'fade' | 'smash' | 'bites' | 'dissolve' | 'blank';
+type Phase = 'arriving' | 'bites' | 'dissolve' | 'blank' | 'text' | 'reassemble';
 
 interface CheckoutTransitionProps {
   burgerState: Record<string, string | null>;
   onComplete: () => void;
 }
 
-// Three bite "erasers" — circles of the page background colour positioned over the burger,
-// scaling in to look like chunks have been taken out.
 const BITES = [
-  { cx: '60%', cy: '70%', r: 64, delay: 0   }, // bottom-right (patty area)
-  { cx: '38%', cy: '28%', r: 58, delay: 380 }, // top-left (bun)
-  { cx: '68%', cy: '46%', r: 72, delay: 760 }, // right side (cheese/toppings)
+  { delay:   0, dx:  160, dy: -60,  r: 160, recoil: -1 },
+  { delay: 380, dx:  100, dy:  80,  r: 155, recoil:  1 },
+  { delay: 760, dx: -30,  dy: -40,  r: 150, recoil: -1 },
+  { delay:1140, dx: -140, dy:  40,  r: 145, recoil:  1 },
+];
+
+const TEXT_LINES: { text: string; className: string }[] = [
+  {
+    text: "WHAT THE MENU DOESN'T SHOW",
+    className: "text-[10px] font-black uppercase tracking-[0.25em] text-zinc-600",
+  },
+  {
+    text: "Animal agriculture occupies 83% of global farmland",
+    className: "text-[22px] font-black leading-snug text-zinc-100 text-center",
+  },
+  {
+    text: "to produce just 18% of the world's calories.",
+    className: "text-[22px] font-black leading-snug text-zinc-400 text-center",
+  },
+  {
+    text: "The environmental cost never appears on a menu.",
+    className: "text-sm font-medium text-zinc-500 text-center",
+  },
+  {
+    text: "Until now.",
+    className: "text-sm font-bold text-amber-500 text-center",
+  },
 ];
 
 export const CheckoutTransition = ({ burgerState, onComplete }: CheckoutTransitionProps) => {
-  const [phase, setPhase] = useState<Phase>('fade');
-  const [activeBites, setActiveBites] = useState<number>(0);
-  const [recoil, setRecoil] = useState<number>(0);
+  const [phase, setPhase]             = useState<Phase>('arriving');
+  const [activeBites, setActiveBites] = useState(0);
+  const [recoil, setRecoil]           = useState(0);
+  const [visibleLines, setVisibleLines] = useState(0);
   const timersRef = useRef<number[]>([]);
 
   useEffect(() => {
-    const addTimer = (fn: () => void, ms: number) => {
-      const id = window.setTimeout(fn, ms);
-      timersRef.current.push(id);
+    const t = (fn: () => void, ms: number) => {
+      timersRef.current.push(window.setTimeout(fn, ms));
     };
 
-    // Phase A → B at 500ms
-    addTimer(() => setPhase('smash'), 500);
-    // Phase B → C at 1100ms
-    addTimer(() => setPhase('bites'), 1100);
-    // Bite 1 at 1100ms (immediate when phase=bites)
-    addTimer(() => { setActiveBites(1); setRecoil(1); }, 1100);
-    addTimer(() => setRecoil(0), 1280);
-    // Bite 2 at 1500ms
-    addTimer(() => { setActiveBites(2); setRecoil(2); }, 1500);
-    addTimer(() => setRecoil(0), 1680);
-    // Bite 3 at 1900ms
-    addTimer(() => { setActiveBites(3); setRecoil(3); }, 1900);
-    addTimer(() => setRecoil(0), 2080);
-    // Phase C → D at 2600ms
-    addTimer(() => setPhase('dissolve'), 2600);
-    // Phase D → E at 3200ms
-    addTimer(() => setPhase('blank'), 3200);
-    // Complete at 3700ms
-    addTimer(() => onComplete(), 3700);
+    // — checkout hero animation —
+    t(() => setPhase('bites'), 650);
 
-    return () => {
-      timersRef.current.forEach(id => clearTimeout(id));
-      timersRef.current = [];
-    };
+    BITES.forEach((b, i) => {
+      const at = 650 + b.delay;
+      t(() => { setActiveBites(i + 1); setRecoil(b.recoil); }, at);
+      t(() => setRecoil(0), at + 200);
+    });
+
+    t(() => setPhase('dissolve'), 2200);
+    t(() => setPhase('blank'),    2700);
+
+    // — text reveal —
+    t(() => setPhase('text'),     3200);
+    t(() => setVisibleLines(1),   3350);
+    t(() => setVisibleLines(2),   3850);
+    t(() => setVisibleLines(3),   4700);
+    t(() => setVisibleLines(4),   5400);
+    t(() => setVisibleLines(5),   5950);
+
+    // — burger reassembly —
+    t(() => setPhase('reassemble'), 6800);
+    t(() => onComplete(),           8200);
+
+    return () => { timersRef.current.forEach(clearTimeout); timersRef.current = []; };
   }, [onComplete]);
 
-  // Recoil shake: small x-offset depending on which bite is taking effect
-  const recoilOffset = recoil === 1 ? -4 : recoil === 2 ? 4 : recoil === 3 ? -3 : 0;
-
-  // Burger scale + isAssembled per phase
-  const burgerScale =
-    phase === 'fade'     ? 0.85 :
-    phase === 'smash'    ? 1.08 :
-    phase === 'bites'    ? 1.08 :
-    phase === 'dissolve' ? 0.4  : 0;
-
-  const burgerOpacity =
-    phase === 'dissolve' ? 0 :
-    phase === 'blank'    ? 0 : 1;
-
-  const isAssembled = phase !== 'fade';
+  const heroVisible  = phase === 'arriving' || phase === 'bites' || phase === 'dissolve';
+  const heroOpacity  = phase === 'dissolve' ? 0 : 1;
 
   return (
-    <div className="flex flex-col h-full w-full bg-[#09090b] items-center justify-center relative overflow-hidden">
+    <motion.div
+      className="absolute inset-0 z-30 overflow-hidden"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0, transition: { duration: 0.35 } }}
+      transition={{ duration: 0.35, ease: 'easeIn' }}
+      style={{ backgroundColor: '#09090b' }}
+    >
+      <div className="w-full h-full flex items-center justify-center relative">
 
-      {/* The burger, centered */}
-      <AnimatePresence>
-        {phase !== 'blank' && (
-          <motion.div
-            key="burger-wrap"
-            className="relative flex items-center justify-center w-[340px] h-[440px]"
-            animate={{
-              scale: burgerScale,
-              x: recoilOffset,
-              opacity: burgerOpacity,
-            }}
-            transition={{
-              scale:   { type: 'spring', stiffness: 220, damping: 22 },
-              x:       { type: 'spring', stiffness: 600, damping: 14 },
-              opacity: { duration: 0.5 },
-            }}
-          >
-            <BurgerStack
-              burgerState={burgerState}
-              direction={1}
-              isAssembled={isAssembled}
-              isCompact
-            />
-
-            {/* Bite overlays — circles in bg color that "erase" chunks of the burger */}
-            {BITES.map((b, i) => (
-              <motion.div
-                key={i}
-                className="absolute"
-                style={{
-                  left: b.cx,
-                  top: b.cy,
-                  width: b.r * 2,
-                  height: b.r * 2,
-                  marginLeft: -b.r,
-                  marginTop: -b.r,
-                  borderRadius: '50%',
-                  background: '#09090b',
-                  boxShadow: '0 0 0 3px rgba(9,9,11,1), inset 0 0 8px rgba(0,0,0,0.6)',
-                  pointerEvents: 'none',
-                  zIndex: 200,
-                }}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{
-                  scale: activeBites > i ? 1 : 0,
-                  opacity: activeBites > i ? 1 : 0,
-                }}
-                transition={{
-                  scale:   { type: 'spring', stiffness: 380, damping: 20 },
-                  opacity: { duration: 0.18 },
-                }}
+        {/* ── Checkout hero burger ── */}
+        <AnimatePresence>
+          {heroVisible && (
+            <motion.div
+              key="hero"
+              className="w-[340px] h-[440px] flex items-center justify-center"
+              initial={{ y: '-28vh', scale: 0.85, opacity: 0 }}
+              animate={{
+                y:       0,
+                scale:   phase === 'dissolve' ? 1.04 : 1.1,
+                opacity: heroOpacity,
+                x:       recoil * 8,
+              }}
+              transition={{
+                y:       { type: 'spring', stiffness: 80, damping: 20, delay: 0.08 },
+                scale:   { type: 'spring', stiffness: 80, damping: 20, delay: 0.08 },
+                opacity: { duration: 0.22, delay: 0.1 },
+                x:       { type: 'spring', stiffness: 600, damping: 14 },
+              }}
+            >
+              <BurgerStack
+                burgerState={burgerState}
+                direction={1}
+                isAssembled={true}
+                isCompact
               />
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      {/* Phase E: single thin white line draws across centre */}
-      <AnimatePresence>
-        {phase === 'blank' && (
+        {/* ── Bite circles ── */}
+        {BITES.map((b, i) => (
           <motion.div
-            key="blank-line"
-            initial={{ scaleX: 0, opacity: 0 }}
-            animate={{ scaleX: 1, opacity: [0, 1, 1, 0] }}
-            transition={{
-              scaleX:  { duration: 0.32, ease: 'easeOut' },
-              opacity: { duration: 0.5, times: [0, 0.2, 0.7, 1] },
+            key={i}
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              width:      b.r * 2,
+              height:     b.r * 2,
+              left:       `calc(50% + ${b.dx - b.r}px)`,
+              top:        `calc(50% + ${b.dy - b.r}px)`,
+              background: '#09090b',
             }}
-            style={{ originX: 0.5 }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 h-px w-[60%] bg-white"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{
+              scale:   activeBites > i ? 1 : 0,
+              opacity: activeBites > i && phase === 'bites' ? 1 : 0,
+              x: recoil * 8,
+            }}
+            transition={{
+              scale:   { type: 'spring', stiffness: 320, damping: 18 },
+              opacity: { duration: phase === 'dissolve' ? 0.55 : 0.06 },
+              x:       { type: 'spring', stiffness: 600, damping: 14 },
+            }}
           />
-        )}
-      </AnimatePresence>
+        ))}
 
-      {/* Subtle progress hint at top — only during phases A-B-C */}
-      <AnimatePresence>
-        {(phase === 'smash' || phase === 'bites' || phase === 'dissolve') && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
-            exit={{ opacity: 0 }}
-            className="absolute top-8 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.4em] text-zinc-700 font-bold"
-          >
-            Calculating impact…
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+        {/* ── Blank-screen sweep line ── */}
+        <AnimatePresence>
+          {phase === 'blank' && (
+            <motion.div
+              key="sweep"
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: [0, 1, 1, 0] }}
+              transition={{
+                scaleX:  { duration: 0.32, ease: 'easeOut' },
+                opacity: { duration: 0.5, times: [0, 0.2, 0.7, 1] },
+              }}
+              style={{ originX: 0.5 }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 h-px w-[60%] bg-white"
+            />
+          )}
+        </AnimatePresence>
+
+        {/* ── Calculating label (bites / dissolve) ── */}
+        <AnimatePresence>
+          {(phase === 'bites' || phase === 'dissolve') && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.4 }}
+              exit={{ opacity: 0 }}
+              className="absolute top-8 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.4em] text-zinc-600 font-bold select-none"
+            >
+              Calculating impact…
+            </motion.p>
+          )}
+        </AnimatePresence>
+
+        {/* ── Text reveal ── */}
+        <AnimatePresence>
+          {phase === 'text' && (
+            <motion.div
+              key="text-reveal"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+              className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-10"
+            >
+              {TEXT_LINES.slice(0, visibleLines).map((line, i) => (
+                <motion.p
+                  key={i}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
+                  className={line.className}
+                >
+                  {line.text}
+                </motion.p>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ── Burger reassembly ── */}
+        <AnimatePresence>
+          {phase === 'reassemble' && (
+            <motion.div
+              key="reassemble"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              className="absolute inset-0 flex items-center justify-center"
+            >
+              <div className="w-[340px] h-[440px] flex items-center justify-center">
+                <BurgerStack
+                  burgerState={burgerState}
+                  direction={1}
+                  isAssembled={true}
+                  isCompact
+                  staggerIn
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+      </div>
+    </motion.div>
   );
 };

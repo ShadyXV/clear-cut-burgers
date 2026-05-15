@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { EASE, DUR, SPRING } from '../constants/animations';
 import { IngredientSvg } from './ingredients/IngredientLibrary';
-import { BURGER_SLOTS } from '../data/ingredients';
+import { BURGER_SLOTS, INGREDIENTS } from '../data/ingredients';
 
 interface SplashScreenProps {
   onStart: () => void;
@@ -10,23 +10,38 @@ interface SplashScreenProps {
 }
 
 export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
+  const [isAssembling, setIsAssembling] = useState(false);
+
+  // Safely handle the transition with a timer and cleanup
+  useEffect(() => {
+    if (!isAssembling) return;
+
+    const timer = setTimeout(() => {
+      onStart();
+    }, 1300);
+
+    return () => clearTimeout(timer);
+  }, [isAssembling, onStart]);
+
   const scatteredLayers = useMemo(() => {
-    // We want to render ingredients in their "stack" order (bottom to top)
-    // but scatter them across the screen.
-    // BURGER_SLOTS is ordered top to bottom.
-    // To have correct z-index, we should either render them bottom-to-top 
-    // or just rely on the order in the array if they are siblings.
-    // Actually, z-index can be explicitly set.
-    
     const activeLayers = BURGER_SLOTS.filter(slot => burgerState[slot.id]);
-    
+
+    // Calculate total height for vertical centering during assembly
+    const totalHeight = activeLayers.reduce((sum, slot) => {
+      const ingredient = INGREDIENTS[burgerState[slot.id]!];
+      return sum + (ingredient?.thickness || 0);
+    }, 0);
+
+    let currentOffset = -totalHeight / 2;
+
     return activeLayers.map((slot, index) => {
       const ingredientId = burgerState[slot.id]!;
-      
-      // Avoid the center (approx 25% to 75% on both axes)
+      const ingredient = INGREDIENTS[ingredientId];
+      const thickness = ingredient?.thickness || 0;
+
+      // Scattered position logic
       const side = Math.floor(Math.random() * 4); // 0: top, 1: right, 2: bottom, 3: left
       let x, y;
-      
       if (side === 0) { // Top edge
         x = 10 + Math.random() * 80;
         y = 8 + Math.random() * 12;
@@ -41,6 +56,10 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
         y = 10 + Math.random() * 80;
       }
 
+      // Calculated center position for assembly (in pixels relative to 50%)
+      const assembledYOffset = currentOffset + thickness / 2;
+      currentOffset += thickness;
+
       return {
         id: ingredientId,
         slotId: slot.id,
@@ -48,11 +67,12 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
         isBottomBun: slot.isBottomBun,
         x: `${x}%`,
         y: `${y}%`,
+        assembledYOffset,
         scale: 0.7 + Math.random() * 0.3,
         rotate: Math.random() * 90 - 45,
         delay: Math.random() * 2,
         duration: 8 + Math.random() * 4,
-        zIndex: 100 - BURGER_SLOTS.findIndex(s => s.id === slot.id), // Higher z-index for layers higher in stack
+        zIndex: 100 - BURGER_SLOTS.findIndex(s => s.id === slot.id),
       };
     });
   }, [burgerState]);
@@ -65,7 +85,7 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
       exit={{ y: '-100%' }}
       transition={{ duration: DUR.SPLASH, ease: EASE.CURTAIN }}
     >
-      {/* Scattered Ingredients Layer */}
+      {/* Scattered/Assembling Ingredients Layer */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {scatteredLayers.map((layer, i) => (
           <motion.div
@@ -81,11 +101,24 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
               filter: layer.scale < 0.8 ? 'blur(1.5px)' : 'none',
             }}
             initial={{ x: '-50%', y: '-50%' }}
-            animate={{
+            animate={isAssembling ? {
+              left: '50%',
+              top: `calc(50% + ${layer.assembledYOffset}px)`,
+              rotate: 0,
+              scale: 1.2, // Slightly larger for emphasis in center
+              opacity: 1,
+              filter: 'none',
+              y: '-50%',
+            } : {
               y: ['-50%', '-60%', '-50%'],
               rotate: [layer.rotate, layer.rotate + 15, layer.rotate],
             }}
-            transition={{
+            transition={isAssembling ? {
+              duration: 0.8,
+              ease: EASE.SNAPPY,
+              // Stagger the assembly from bottom to top
+              delay: (scatteredLayers.length - 1 - i) * 0.05,
+            } : {
               duration: layer.duration,
               repeat: Infinity,
               delay: layer.delay,
@@ -104,16 +137,17 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
       {/* Subtle amber radial glow from below centre */}
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_70%_55%_at_50%_65%,rgba(245,158,11,0.07),transparent)]" />
 
-      <motion.div 
+      {/* Main Text Content — Fades out when assembling */}
+      <motion.div
         className="relative flex flex-col items-center text-center px-10 max-w-xs gap-8"
         initial="initial"
-        animate="animate"
+        animate={isAssembling ? { opacity: 0, scale: 0.95, transition: { duration: 0.4 } } : "animate"}
         variants={{
           animate: { transition: { staggerChildren: 0.15, delayChildren: 0.3 } }
         }}
       >
         {/* Brand badge */}
-        <motion.div 
+        <motion.div
           variants={{
             initial: { opacity: 0, y: 20 },
             animate: { opacity: 1, y: 0 }
@@ -130,7 +164,7 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
         </motion.div>
 
         {/* Headline */}
-        <motion.div 
+        <motion.div
           variants={{
             initial: { opacity: 0, scale: 0.9, rotateX: -20 },
             animate: { opacity: 1, scale: 1, rotateX: 0 }
@@ -147,7 +181,7 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
         </motion.div>
 
         {/* Subtext */}
-        <motion.p 
+        <motion.p
           variants={{
             initial: { opacity: 0 },
             animate: { opacity: 1 }
@@ -159,7 +193,6 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
           Load up the toppings. Make it yours.
         </motion.p>
 
-        {/* CTA */}
         <motion.div
           variants={{
             initial: { opacity: 0, y: 10 },
@@ -167,11 +200,12 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
           }}
         >
           <motion.button
-            onClick={onStart}
-            whileHover={{ scale: 1.04, backgroundColor: '#fbbf24' }}
-            whileTap={{ scale: 0.96 }}
+            onClick={() => setIsAssembling(true)}
+            disabled={isAssembling}
+            whileHover={!isAssembling ? { scale: 1.04, backgroundColor: '#fbbf24' } : {}}
+            whileTap={!isAssembling ? { scale: 0.96 } : {}}
             transition={SPRING.BUTTON}
-            className="px-9 py-3.5 bg-amber-500 text-zinc-950 font-black text-sm rounded-full tracking-wide transition-colors shadow-[0_8px_30px_rgba(245,158,11,0.25)]"
+            className="px-9 py-3.5 bg-amber-500 text-zinc-950 font-black text-sm rounded-full tracking-wide transition-colors shadow-[0_8px_30px_rgba(245,158,11,0.25)] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             BUILD MY BURGER →
           </motion.button>

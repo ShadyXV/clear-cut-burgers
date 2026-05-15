@@ -27,23 +27,19 @@ const TEXT_LINES: { text: string; className: string }[] = [
   {
     text: "WHAT THE MENU DOESN'T SHOW",
     className:
-      'text-[10px] font-black uppercase tracking-[0.25em] text-zinc-600',
+      'text-xs font-black uppercase tracking-[0.25em] text-zinc-600',
   },
   {
     text: 'Animal agriculture occupies 83% of global farmland',
-    className: 'text-[22px] font-black leading-snug text-zinc-100 text-center',
+    className: 'text-3xl font-black leading-tight text-zinc-100 text-center px-4',
   },
   {
     text: "to produce just 18% of the world's calories.",
-    className: 'text-[22px] font-black leading-snug text-zinc-400 text-center',
+    className: 'text-2xl font-black leading-snug text-zinc-400 text-center px-4',
   },
   {
     text: 'The environmental cost never appears on a menu.',
-    className: 'text-sm font-medium text-zinc-500 text-center',
-  },
-  {
-    text: 'Until now.',
-    className: 'text-sm font-bold text-amber-500 text-center',
+    className: 'text-lg font-medium text-zinc-500 text-center mt-2 px-4',
   },
 ];
 
@@ -136,9 +132,9 @@ export const CheckoutTransition = ({
           animate={{
             opacity:
               phase === 'dissolve' ||
-              phase === 'blank' ||
-              phase === 'text' ||
-              phase === 'reassemble'
+                phase === 'blank' ||
+                phase === 'text' ||
+                phase === 'reassemble'
                 ? 1
                 : 0.4,
           }}
@@ -164,9 +160,9 @@ export const CheckoutTransition = ({
                   scale: activeBites > i ? 1 : 0,
                   opacity:
                     activeBites > i &&
-                    (phase === 'bites' ||
-                      phase === 'dissolve' ||
-                      phase === 'blank')
+                      (phase === 'bites' ||
+                        phase === 'dissolve' ||
+                        phase === 'blank')
                       ? 1
                       : 0,
                 }}
@@ -207,33 +203,44 @@ export const CheckoutTransition = ({
               transition={{ duration: 0.5 }}
               className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-10"
             >
-              {TEXT_LINES.slice(0, visibleLines).map((line, i) => (
+              {TEXT_LINES.map((line, i) => (
                 <motion.p
                   key={i}
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, ease: EASE.SNAPPY }}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{
+                    opacity: i < visibleLines ? 1 : 0,
+                    y: i < visibleLines ? 0 : 16
+                  }}
+                  transition={{
+                    duration: 0.9,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
                   className={line.className}
                 >
                   {line.text}
                 </motion.p>
               ))}
 
-              <AnimatePresence>
-                {showButton && (
-                  <motion.button
-                    key="see-impact"
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: DUR.IMPACT, ease: EASE.SNAPPY }}
-                    onClick={handleSeeImpact}
-                    className="mt-4 px-8 py-3.5 bg-amber-500 text-zinc-950 font-black text-sm rounded-full tracking-wide hover:bg-amber-400 active:bg-amber-300 transition-colors"
-                  >
-                    See the impact →
-                  </motion.button>
-                )}
-              </AnimatePresence>
+              <div className="h-[52px] mt-6">
+                <AnimatePresence>
+                  {showButton && (
+                    <motion.button
+                      key="see-impact"
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{
+                        duration: 0.9,
+                        ease: [0.16, 1, 0.3, 1],
+                      }}
+                      onClick={handleSeeImpact}
+                      className="h-full px-8 bg-amber-500 text-zinc-950 font-black text-sm rounded-full tracking-wide hover:bg-amber-400 active:bg-amber-300 transition-colors"
+                    >
+                      See the impact →
+                    </motion.button>
+                  )}
+                </AnimatePresence>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

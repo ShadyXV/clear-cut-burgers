@@ -8,7 +8,10 @@ interface IconProps {
   size?: number;
 }
 
-export const ChickenIcon = ({ color = 'currentColor', size = 18 }: IconProps) => (
+export const ChickenIcon = ({
+  color = 'currentColor',
+  size = 18,
+}: IconProps) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
     {/* Body */}
     <path d="M 14 8 C 17 8 19 10 19 13 C 19 17 16 19 12 19 C 8 19 6 17 6 14 C 6 11 8 9 11 9 L 12 6 L 13 6 L 14 8 Z" />
@@ -95,7 +98,7 @@ export const CowIcon = ({ color = 'currentColor', size = 18 }: IconProps) => (
 
 export const ICONS_BY_SPECIES_ID: Record<string, React.FC<IconProps>> = {
   chicken: ChickenIcon,
-  ducks:   DuckIcon,
-  pigs:    PigIcon,
-  cattle:  CowIcon,
+  ducks: DuckIcon,
+  pigs: PigIcon,
+  cattle: CowIcon,
 };

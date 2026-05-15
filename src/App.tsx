@@ -5,6 +5,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { SPRING, EASE, DUR } from './constants/animations';
 import { BurgerStack } from './components/BurgerStack';
 import { BurgerEditor } from './components/BurgerEditor';
 import { ImpactScreen } from './components/ImpactScreen';
@@ -19,33 +20,35 @@ type AppView = 'builder' | 'impact' | 'deaths';
 
 const VIEW_DEPTH: Record<AppView, number> = {
   builder: 0,
-  impact:  1,
-  deaths:  2,
+  impact: 1,
+  deaths: 2,
 };
 
 export default function App() {
-  const [showSplash, setShowSplash]   = useState(true);
-  const [direction, setDirection]     = useState(1);
-  const [view, setView]               = useState<AppView>('builder');
-  const [prevView, setPrevView]       = useState<AppView>('builder');
+  const [showSplash, setShowSplash] = useState(true);
+  const [direction, setDirection] = useState(1);
+  const [view, setView] = useState<AppView>('builder');
+  const [prevView, setPrevView] = useState<AppView>('builder');
   // isDeparting drives all departure animation; checkout overlay lives inside builder.
   const [isDeparting, setIsDeparting] = useState(false);
-  const [burgerState, setBurgerState] = useState<Record<string, string | null>>({
-    bunTop:      'brioche',
-    topping6:    null,
-    topping5:    null,
-    topping4:    null,
-    topping3:    null,
-    topping2:    null,
-    topping1:    'tomato',
-    cheese2:     null,
-    cheese1:     'cheddar',
-    protein3:    null,
-    protein2:    null,
-    protein1:    'beefPatty',
-    sauceBottom: 'sauceMayo',
-    bunBottom:   'brioche',
-  });
+  const [burgerState, setBurgerState] = useState<Record<string, string | null>>(
+    {
+      bunTop: 'brioche',
+      topping6: null,
+      topping5: null,
+      topping4: null,
+      topping3: null,
+      topping2: null,
+      topping1: 'tomato',
+      cheese2: null,
+      cheese1: 'cheddar',
+      protein3: null,
+      protein2: null,
+      protein1: 'beefPatty',
+      sauceBottom: 'sauceMayo',
+      bunBottom: 'brioche',
+    },
+  );
 
   const navigateTo = (next: AppView) => {
     setPrevView(view);
@@ -66,31 +69,36 @@ export default function App() {
   const slideDir = VIEW_DEPTH[view] > VIEW_DEPTH[prevView] ? 1 : -1;
   const navLabel = view === 'builder' ? 'CHECKOUT — $18.50' : 'EDIT BURGER';
 
-  const handleSlotChange = (slotId: SlotKey, val: string | null, dir: number) => {
+  const handleSlotChange = (
+    slotId: SlotKey,
+    val: string | null,
+    dir: number,
+  ) => {
     setDirection(dir);
-    setBurgerState(prev => ({ ...prev, [slotId]: val }));
+    setBurgerState((prev) => ({ ...prev, [slotId]: val }));
   };
 
   return (
     <div className="flex flex-col h-screen w-full bg-[#09090b] text-[#fafafa] overflow-hidden font-sans">
-
       {/* ── Nav — slides up gracefully at the start of checkout ── */}
       <motion.nav
         animate={{
-          y:       isDeparting ? '-120%' : 0,
+          y: isDeparting ? '-120%' : 0,
           opacity: isDeparting ? 0 : 1,
         }}
-        transition={{ duration: 0.75, ease: [0.25, 1, 0.5, 1] }}
+        transition={{ duration: DUR.SLIDE, ease: EASE.SNAPPY }}
         className="h-16 flex items-center justify-between px-8 border-b border-zinc-800 bg-zinc-950/50 relative z-50 shrink-0"
       >
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center font-bold text-zinc-950">B</div>
+          <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center font-bold text-zinc-950">
+            B
+          </div>
           <span className="text-lg font-semibold tracking-tight">
             STACK MASTER <span className="text-zinc-500 font-normal">LABS</span>
           </span>
         </div>
         <div className="flex items-center gap-6">
-<button
+          <button
             onClick={() => {
               if (view === 'builder') handleCheckoutPress();
               else navigateTo('builder');
@@ -106,7 +114,6 @@ export default function App() {
       {/* ── Main workspace ── */}
       <main className="flex-1 flex flex-col overflow-hidden relative z-0 min-h-0">
         <AnimatePresence mode="wait" initial={false} custom={slideDir}>
-
           {view === 'builder' && (
             <motion.div
               key="builder"
@@ -114,29 +121,39 @@ export default function App() {
               initial={{ x: `${slideDir * -100}%`, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               // Screen is already black from checkout dissolve — exit instantly.
-              exit={{ opacity: 0, transition: { duration: 0.001 } }}
-              transition={{ type: 'spring', stiffness: 260, damping: 28 }}
+              exit={{ opacity: 0, transition: { duration: DUR.INSTANT } }}
+              transition={SPRING.VIEW}
               className="absolute inset-0 flex flex-col"
             >
               {/* ── Burger preview ── */}
               <div className="h-[44%] shrink-0 relative flex items-center justify-center bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-900 to-black overflow-hidden">
-
                 {/* Decorative chrome fades out during departure */}
                 <motion.div
                   animate={{ opacity: isDeparting ? 0 : 1 }}
                   transition={{ duration: 0.3 }}
                   className="absolute top-4 left-6 pointer-events-none"
                 >
-                  <h1 className="text-3xl font-black italic text-zinc-800 leading-none">THE GOLIATH</h1>
-                  <p className="text-amber-500/50 font-mono text-xs tracking-tighter">ID: #BM-80822-XP</p>
+                  <h1 className="text-3xl font-black italic text-zinc-800 leading-none">
+                    THE GOLIATH
+                  </h1>
+                  <p className="text-amber-500/50 font-mono text-xs tracking-tighter">
+                    ID: #BM-80822-XP
+                  </p>
                 </motion.div>
                 <motion.div
                   animate={{ opacity: isDeparting ? 0 : 1 }}
                   transition={{ duration: 0.3 }}
                   className="absolute bottom-4 right-6 text-right pointer-events-none"
                 >
-                  <p className="text-[10px] text-zinc-500 uppercase tracking-widest">Nutrition</p>
-                  <p className="text-xl font-bold">1,142 <span className="text-sm font-normal text-zinc-400">KCAL</span></p>
+                  <p className="text-[10px] text-zinc-500 uppercase tracking-widest">
+                    Nutrition
+                  </p>
+                  <p className="text-xl font-bold">
+                    1,142{' '}
+                    <span className="text-sm font-normal text-zinc-400">
+                      KCAL
+                    </span>
+                  </p>
                 </motion.div>
 
                 {/* Idle burger — fades as the hero takes over */}
@@ -157,12 +174,14 @@ export default function App() {
               {/* ── Editor — slides down off screen during departure ── */}
               <motion.div
                 animate={{ y: isDeparting ? '100%' : '0%' }}
-                transition={{ duration: 0.75, ease: [0.25, 1, 0.5, 1] }}
+                transition={{ duration: DUR.SLIDE, ease: EASE.SNAPPY }}
                 className="flex-1 overflow-hidden flex flex-col min-h-0"
               >
-                <BurgerEditor burgerState={burgerState} onChangeSlot={handleSlotChange} />
+                <BurgerEditor
+                  burgerState={burgerState}
+                  onChangeSlot={handleSlotChange}
+                />
               </motion.div>
-
             </motion.div>
           )}
 
@@ -170,13 +189,14 @@ export default function App() {
             <motion.div
               key="impact"
               custom={slideDir}
-              initial={{ opacity: 0, x: prevView === 'builder' ? 0 : `${slideDir * 100}%` }}
+              initial={{
+                opacity: 0,
+                x: prevView === 'builder' ? 0 : `${slideDir * 100}%`,
+              }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ x: `${slideDir * -100}%`, opacity: 0 }}
               transition={
-                prevView === 'builder'
-                  ? { duration: 0.55 }
-                  : { type: 'spring', stiffness: 260, damping: 28 }
+                prevView === 'builder' ? { duration: DUR.IMPACT } : SPRING.VIEW
               }
               className="absolute inset-0"
             >
@@ -196,20 +216,22 @@ export default function App() {
               initial={{ x: `${slideDir * 100}%`, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: `${slideDir * 100}%`, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 260, damping: 28 }}
+              transition={SPRING.VIEW}
               className="absolute inset-0"
             >
               <AnimalDeathsScreen
                 burgerState={burgerState}
                 onBack={() => navigateTo('impact')}
                 onSwitchToPlant={() => {
-                  setBurgerState(prev => ({ ...prev, protein1: 'blackBeanPatty' }));
+                  setBurgerState((prev) => ({
+                    ...prev,
+                    protein1: 'blackBeanPatty',
+                  }));
                   navigateTo('builder');
                 }}
               />
             </motion.div>
           )}
-
         </AnimatePresence>
 
         {/* CheckoutTransition lives OUTSIDE AnimatePresence so it persists
@@ -223,7 +245,6 @@ export default function App() {
             />
           )}
         </AnimatePresence>
-
       </main>
 
       {/* Splash overlay — sits above everything, slides up on dismiss */}

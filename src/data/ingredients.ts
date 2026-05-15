@@ -4,45 +4,155 @@ export interface Ingredient {
   id: string;
   name: string;
   category: Category;
-  thickness: number; 
+  thickness: number;
 }
 
 export const INGREDIENTS: Record<string, Ingredient> = {
   // Buns
-  brioche: { id: 'brioche', name: 'Brioche Bun', category: 'bun', thickness: 30 },
+  brioche: {
+    id: 'brioche',
+    name: 'Brioche Bun',
+    category: 'bun',
+    thickness: 30,
+  },
   sesame: { id: 'sesame', name: 'Sesame Bun', category: 'bun', thickness: 30 },
-  paprika: { id: 'paprika', name: 'Paprika Bun', category: 'bun', thickness: 30 },
-  cheeseTopped: { id: 'cheeseTopped', name: 'Cheese Topped Bun', category: 'bun', thickness: 30 },
-  chiveSesame: { id: 'chiveSesame', name: 'Chive & Sesame', category: 'bun', thickness: 30 },
+  paprika: {
+    id: 'paprika',
+    name: 'Paprika Bun',
+    category: 'bun',
+    thickness: 30,
+  },
+  cheeseTopped: {
+    id: 'cheeseTopped',
+    name: 'Cheese Topped Bun',
+    category: 'bun',
+    thickness: 30,
+  },
+  chiveSesame: {
+    id: 'chiveSesame',
+    name: 'Chive & Sesame',
+    category: 'bun',
+    thickness: 30,
+  },
 
   // Proteins
-  beefPatty: { id: 'beefPatty', name: '100% Beef Patty', category: 'protein', thickness: 15 },
-  grilledChicken: { id: 'grilledChicken', name: 'Grilled Chicken', category: 'protein', thickness: 12 },
-  crispyChicken: { id: 'crispyChicken', name: 'Crispy Chicken', category: 'protein', thickness: 16 },
-  blackBeanPatty: { id: 'blackBeanPatty', name: 'Black Bean Patty', category: 'protein', thickness: 14 },
+  beefPatty: {
+    id: 'beefPatty',
+    name: '100% Beef Patty',
+    category: 'protein',
+    thickness: 15,
+  },
+  grilledChicken: {
+    id: 'grilledChicken',
+    name: 'Grilled Chicken',
+    category: 'protein',
+    thickness: 12,
+  },
+  crispyChicken: {
+    id: 'crispyChicken',
+    name: 'Crispy Chicken',
+    category: 'protein',
+    thickness: 16,
+  },
+  blackBeanPatty: {
+    id: 'blackBeanPatty',
+    name: 'Black Bean Patty',
+    category: 'protein',
+    thickness: 14,
+  },
 
   // Cheese
   cheddar: { id: 'cheddar', name: 'Cheddar', category: 'cheese', thickness: 3 },
-  emmental: { id: 'emmental', name: 'Emmental', category: 'cheese', thickness: 3 },
-  mozzarella: { id: 'mozzarella', name: 'Mozzarella', category: 'cheese', thickness: 5 },
-  pepperCheese: { id: 'pepperCheese', name: 'Pepper Cheese', category: 'cheese', thickness: 3 },
+  emmental: {
+    id: 'emmental',
+    name: 'Emmental',
+    category: 'cheese',
+    thickness: 3,
+  },
+  mozzarella: {
+    id: 'mozzarella',
+    name: 'Mozzarella',
+    category: 'cheese',
+    thickness: 5,
+  },
+  pepperCheese: {
+    id: 'pepperCheese',
+    name: 'Pepper Cheese',
+    category: 'cheese',
+    thickness: 3,
+  },
 
   // Toppings
   tomato: { id: 'tomato', name: 'Tomato', category: 'topping', thickness: 6 },
-  redOnion: { id: 'redOnion', name: 'Red Onion', category: 'topping', thickness: 4 },
-  whiteOnion: { id: 'whiteOnion', name: 'White Onion', category: 'topping', thickness: 4 },
-  friedOnion: { id: 'friedOnion', name: 'Fried Onions', category: 'topping', thickness: 6 },
-  pickles: { id: 'pickles', name: 'Pickles', category: 'topping', thickness: 5 },
+  redOnion: {
+    id: 'redOnion',
+    name: 'Red Onion',
+    category: 'topping',
+    thickness: 4,
+  },
+  whiteOnion: {
+    id: 'whiteOnion',
+    name: 'White Onion',
+    category: 'topping',
+    thickness: 4,
+  },
+  friedOnion: {
+    id: 'friedOnion',
+    name: 'Fried Onions',
+    category: 'topping',
+    thickness: 6,
+  },
+  pickles: {
+    id: 'pickles',
+    name: 'Pickles',
+    category: 'topping',
+    thickness: 5,
+  },
   bacon: { id: 'bacon', name: 'Bacon', category: 'topping', thickness: 4 },
-  pineapple: { id: 'pineapple', name: 'Pineapple', category: 'topping', thickness: 8 },
-  guacamole: { id: 'guacamole', name: 'Guacamole', category: 'topping', thickness: 8 },
-  jalapeno: { id: 'jalapeno', name: 'Jalapeños', category: 'topping', thickness: 4 },
-  peppers: { id: 'peppers', name: 'Sweet Peppers', category: 'topping', thickness: 4 },
+  pineapple: {
+    id: 'pineapple',
+    name: 'Pineapple',
+    category: 'topping',
+    thickness: 8,
+  },
+  guacamole: {
+    id: 'guacamole',
+    name: 'Guacamole',
+    category: 'topping',
+    thickness: 8,
+  },
+  jalapeno: {
+    id: 'jalapeno',
+    name: 'Jalapeños',
+    category: 'topping',
+    thickness: 4,
+  },
+  peppers: {
+    id: 'peppers',
+    name: 'Sweet Peppers',
+    category: 'topping',
+    thickness: 4,
+  },
 
   // Sauces
-  sauceMayo: { id: 'sauceMayo', name: 'Pepper Mayo', category: 'sauce', thickness: 3 },
-  sauceHabanero: { id: 'sauceHabanero', name: 'Habanero', category: 'sauce', thickness: 3 },
-  saucePiri: { id: 'saucePiri', name: 'Piri-Piri', category: 'sauce', thickness: 3 },
+  sauceMayo: {
+    id: 'sauceMayo',
+    name: 'Pepper Mayo',
+    category: 'sauce',
+    thickness: 3,
+  },
+  sauceHabanero: {
+    id: 'sauceHabanero',
+    name: 'Habanero',
+    category: 'sauce',
+    thickness: 3,
+  },
+  saucePiri: {
+    id: 'saucePiri',
+    name: 'Piri-Piri',
+    category: 'sauce',
+    thickness: 3,
+  },
 };
 
 export const CATEGORIES: Record<Category, string[]> = {
@@ -59,20 +169,26 @@ export const CATEGORIES: Record<Category, string[]> = {
     'pineapple',
     'guacamole',
     'jalapeno',
-    'peppers'
+    'peppers',
   ],
   sauce: ['sauceMayo', 'sauceHabanero', 'saucePiri'],
 };
 
-export type SlotKey = 
+export type SlotKey =
   | 'bunTop'
-  | `topping${1|2|3|4|5|6}`
-  | `cheese${1|2}`
-  | `protein${1|2|3}`
+  | `topping${1 | 2 | 3 | 4 | 5 | 6}`
+  | `cheese${1 | 2}`
+  | `protein${1 | 2 | 3}`
   | `sauceBottom`
   | 'bunBottom';
 
-export const BURGER_SLOTS: { id: SlotKey, label: string, category: Category | 'bun', isTopBun?: boolean, isBottomBun?: boolean }[] = [
+export const BURGER_SLOTS: {
+  id: SlotKey;
+  label: string;
+  category: Category | 'bun';
+  isTopBun?: boolean;
+  isBottomBun?: boolean;
+}[] = [
   { id: 'bunTop', label: 'Top Bun', category: 'bun', isTopBun: true },
   { id: 'topping6', label: 'Topping 6', category: 'topping' },
   { id: 'topping5', label: 'Topping 5', category: 'topping' },

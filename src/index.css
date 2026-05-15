@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @layer utilities {
   .glass {
@@ -13,4 +13,3 @@
     display: none;
   }
 }
-

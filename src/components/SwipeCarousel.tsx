@@ -1,12 +1,21 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { SPRING } from '../constants/animations';
 import { INGREDIENTS } from '../data/ingredients';
 import { SvgMap } from './ingredients/IngredientLibrary';
 
 // Height-constrained SVG renderer for the carousel (w-full h-auto clips; h-full w-auto fits)
-const CarouselSvg = ({ ingredientId, isTopBun }: { ingredientId: string; isTopBun: boolean }) => {
+const CarouselSvg = ({
+  ingredientId,
+  isTopBun,
+}: {
+  ingredientId: string;
+  isTopBun: boolean;
+}) => {
   const isBun = INGREDIENTS[ingredientId]?.category === 'bun';
-  const lookupId = isBun ? `${ingredientId}_${isTopBun ? 'top' : 'bottom'}` : ingredientId;
+  const lookupId = isBun
+    ? `${ingredientId}_${isTopBun ? 'top' : 'bottom'}`
+    : ingredientId;
   const SvgComponent = SvgMap[lookupId];
   if (!SvgComponent) return null;
   return (
@@ -28,16 +37,32 @@ interface SwipeCarouselProps {
 }
 
 const NoneCard = ({ full }: { full: boolean }) => (
-  <div className={`flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-700 bg-zinc-900/40 h-full ${full ? 'gap-1' : ''}`}>
+  <div
+    className={`flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-700 bg-zinc-900/40 h-full ${full ? 'gap-1' : ''}`}
+  >
     {full && <span className="text-zinc-600 text-xl leading-none">—</span>}
-    {full && <span className="text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">None</span>}
+    {full && (
+      <span className="text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">
+        None
+      </span>
+    )}
   </div>
 );
 
-const IngredientCard = ({ id, full, showTopBun }: { id: string; full: boolean; showTopBun: boolean }) => {
+const IngredientCard = ({
+  id,
+  full,
+  showTopBun,
+}: {
+  id: string;
+  full: boolean;
+  showTopBun: boolean;
+}) => {
   const ingredient = INGREDIENTS[id];
   return (
-    <div className={`flex flex-col items-center rounded-xl border border-zinc-800/60 bg-zinc-900/70 h-full ${full ? 'p-2 gap-1' : 'p-1'}`}>
+    <div
+      className={`flex flex-col items-center rounded-xl border border-zinc-800/60 bg-zinc-900/70 h-full ${full ? 'p-2 gap-1' : 'p-1'}`}
+    >
       {/* flex-1 min-h-0 gives this div a constrained height; SVG sizes from h-full, not width */}
       <div className="w-full flex-1 min-h-0 flex items-center justify-center overflow-hidden">
         <CarouselSvg ingredientId={id} isTopBun={showTopBun} />
@@ -51,7 +76,12 @@ const IngredientCard = ({ id, full, showTopBun }: { id: string; full: boolean; s
   );
 };
 
-export const SwipeCarousel = ({ options, value, onChange, showTopBun = false }: SwipeCarouselProps) => {
+export const SwipeCarousel = ({
+  options,
+  value,
+  onChange,
+  showTopBun = false,
+}: SwipeCarouselProps) => {
   const [dir, setDir] = useState(1);
   const containerRef = useRef<HTMLDivElement>(null);
   const startX = useRef<number | null>(null);
@@ -69,9 +99,11 @@ export const SwipeCarousel = ({ options, value, onChange, showTopBun = false }: 
   };
 
   const renderCard = (optId: string | null, full: boolean) =>
-    optId === null
-      ? <NoneCard full={full} />
-      : <IngredientCard id={optId} full={full} showTopBun={showTopBun} />;
+    optId === null ? (
+      <NoneCard full={full} />
+    ) : (
+      <IngredientCard id={optId} full={full} showTopBun={showTopBun} />
+    );
 
   const handlePointerDown = (e: React.PointerEvent) => {
     startX.current = e.clientX;
@@ -133,7 +165,7 @@ export const SwipeCarousel = ({ options, value, onChange, showTopBun = false }: 
             initial={{ opacity: 0, x: dir * 48, scale: 0.96 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: dir * -48, scale: 0.96 }}
-            transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+            transition={SPRING.SNAPPY}
             className="h-full"
           >
             {renderCard(options[idx], true)}

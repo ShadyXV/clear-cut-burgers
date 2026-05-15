@@ -1,8 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { BurgerStack } from './BurgerStack';
+import {
+  SPRING,
+  EASE,
+  DUR,
+  CHECKOUT_TIMELINE,
+  SIZES,
+} from '../constants/animations';
 
-type Phase = 'arriving' | 'bites' | 'dissolve' | 'blank' | 'text' | 'reassemble';
+type Phase =
+  | 'arriving'
+  | 'bites'
+  | 'dissolve'
+  | 'blank'
+  | 'text'
+  | 'reassemble';
 
 interface CheckoutTransitionProps {
   burgerState: Record<string, string | null>;
@@ -10,41 +23,45 @@ interface CheckoutTransitionProps {
 }
 
 const BITES = [
-  { delay:   0, dx:  160, dy: -60,  r: 160, recoil: -1 },
-  { delay: 380, dx:  100, dy:  80,  r: 155, recoil:  1 },
-  { delay: 760, dx: -30,  dy: -40,  r: 150, recoil: -1 },
-  { delay:1140, dx: -140, dy:  40,  r: 145, recoil:  1 },
+  { dx: 160, dy: -60, r: 160, recoil: -1 },
+  { dx: 100, dy: 80, r: 155, recoil: 1 },
+  { dx: -30, dy: -40, r: 150, recoil: -1 },
+  { dx: -140, dy: 40, r: 145, recoil: 1 },
 ];
 
 const TEXT_LINES: { text: string; className: string }[] = [
   {
     text: "WHAT THE MENU DOESN'T SHOW",
-    className: "text-[10px] font-black uppercase tracking-[0.25em] text-zinc-600",
+    className:
+      'text-[10px] font-black uppercase tracking-[0.25em] text-zinc-600',
   },
   {
-    text: "Animal agriculture occupies 83% of global farmland",
-    className: "text-[22px] font-black leading-snug text-zinc-100 text-center",
+    text: 'Animal agriculture occupies 83% of global farmland',
+    className: 'text-[22px] font-black leading-snug text-zinc-100 text-center',
   },
   {
     text: "to produce just 18% of the world's calories.",
-    className: "text-[22px] font-black leading-snug text-zinc-400 text-center",
+    className: 'text-[22px] font-black leading-snug text-zinc-400 text-center',
   },
   {
-    text: "The environmental cost never appears on a menu.",
-    className: "text-sm font-medium text-zinc-500 text-center",
+    text: 'The environmental cost never appears on a menu.',
+    className: 'text-sm font-medium text-zinc-500 text-center',
   },
   {
-    text: "Until now.",
-    className: "text-sm font-bold text-amber-500 text-center",
+    text: 'Until now.',
+    className: 'text-sm font-bold text-amber-500 text-center',
   },
 ];
 
-export const CheckoutTransition = ({ burgerState, onComplete }: CheckoutTransitionProps) => {
-  const [phase, setPhase]             = useState<Phase>('arriving');
+export const CheckoutTransition = ({
+  burgerState,
+  onComplete,
+}: CheckoutTransitionProps) => {
+  const [phase, setPhase] = useState<Phase>('arriving');
   const [activeBites, setActiveBites] = useState(0);
-  const [recoil, setRecoil]           = useState(0);
+  const [recoil, setRecoil] = useState(0);
   const [visibleLines, setVisibleLines] = useState(0);
-  const [showButton, setShowButton]     = useState(false);
+  const [showButton, setShowButton] = useState(false);
   const timersRef = useRef<number[]>([]);
 
   useEffect(() => {
@@ -52,68 +69,81 @@ export const CheckoutTransition = ({ burgerState, onComplete }: CheckoutTransiti
       timersRef.current.push(window.setTimeout(fn, ms));
     };
 
-    // — checkout hero animation —
-    t(() => setPhase('bites'), 650);
+    // Named phase handlers — intent is clear at call site
+    const startBites = () => setPhase('bites');
+    const startDissolve = () => setPhase('dissolve');
+    const startBlank = () => setPhase('blank');
+    const startText = () => setPhase('text');
+    const showBtn = () => setShowButton(true);
+
+    t(startBites, CHECKOUT_TIMELINE.BITES_START);
 
     BITES.forEach((b, i) => {
-      const at = 650 + b.delay;
-      t(() => { setActiveBites(i + 1); setRecoil(b.recoil); }, at);
-      t(() => setRecoil(0), at + 200);
+      const at =
+        CHECKOUT_TIMELINE.BITES_START + CHECKOUT_TIMELINE.BITE_INTERVALS[i];
+      t(() => {
+        setActiveBites(i + 1);
+        setRecoil(b.recoil);
+      }, at);
+      t(() => setRecoil(0), at + CHECKOUT_TIMELINE.RECOIL_RESET_MS);
     });
 
-    t(() => setPhase('dissolve'), 2200);
-    t(() => setPhase('blank'),    2700);
+    t(startDissolve, CHECKOUT_TIMELINE.DISSOLVE);
+    t(startBlank, CHECKOUT_TIMELINE.BLANK);
+    t(startText, CHECKOUT_TIMELINE.TEXT_START);
 
-    // — text reveal —
-    t(() => setPhase('text'),     3200);
-    t(() => setVisibleLines(1),   3350);
-    t(() => setVisibleLines(2),   3850);
-    t(() => setVisibleLines(3),   4700);
-    t(() => setVisibleLines(4),   5400);
-    t(() => setVisibleLines(5),   5950);
-    t(() => setShowButton(true),  6600);
+    CHECKOUT_TIMELINE.TEXT_LINE_MS.forEach((ms, i) => {
+      t(() => setVisibleLines(i + 1), ms);
+    });
 
-    return () => { timersRef.current.forEach(clearTimeout); timersRef.current = []; };
+    t(showBtn, CHECKOUT_TIMELINE.BUTTON);
+
+    return () => {
+      timersRef.current.forEach(clearTimeout);
+      timersRef.current = [];
+    };
   }, [onComplete]);
 
   const handleSeeImpact = () => {
     setShowButton(false);
     setPhase('reassemble');
-    timersRef.current.push(window.setTimeout(() => onComplete(), 1400));
+    timersRef.current.push(
+      window.setTimeout(() => onComplete(), CHECKOUT_TIMELINE.REASSEMBLY_MS),
+    );
   };
 
-  const heroVisible  = phase === 'arriving' || phase === 'bites' || phase === 'dissolve';
-  const heroOpacity  = phase === 'dissolve' ? 0 : 1;
+  const heroVisible =
+    phase === 'arriving' || phase === 'bites' || phase === 'dissolve';
+  const heroOpacity = phase === 'dissolve' ? 0 : 1;
 
   return (
     <motion.div
       className="absolute inset-0 z-30 overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0, transition: { duration: 0.35 } }}
-      transition={{ duration: 0.35, ease: 'easeIn' }}
+      exit={{ opacity: 0, transition: { duration: DUR.NAV } }}
+      transition={{ duration: DUR.NAV, ease: 'easeIn' }}
       style={{ backgroundColor: '#09090b' }}
     >
       <div className="w-full h-full flex items-center justify-center relative">
-
         {/* ── Checkout hero burger ── */}
         <AnimatePresence>
           {heroVisible && (
             <motion.div
               key="hero"
-              className="w-[340px] h-[440px] flex items-center justify-center"
+              className={`w-[${SIZES.BURGER_CONTAINER_W}px] h-[${SIZES.BURGER_CONTAINER_H}px] flex items-center justify-center`}
               initial={{ y: '-28vh', scale: 0.85, opacity: 0 }}
               animate={{
-                y:       0,
-                scale:   phase === 'dissolve' ? 1.04 : 1.1,
+                y: 0,
+                scale: phase === 'dissolve' ? 1.04 : 1.1,
                 opacity: heroOpacity,
-                x:       recoil * 8,
+                x: recoil * SIZES.RECOIL_PX,
               }}
               transition={{
-                y:       { type: 'spring', stiffness: 80, damping: 20, delay: 0.08 },
-                scale:   { type: 'spring', stiffness: 80, damping: 20, delay: 0.08 },
+                y: { ...SPRING.HERO, delay: 0.08 },
+                scale: { ...SPRING.HERO, delay: 0.08 },
                 opacity: { duration: 0.22, delay: 0.1 },
-                x:       { type: 'spring', stiffness: 600, damping: 14 },
+                x: SPRING.RECOIL,
               }}
             >
               <BurgerStack
@@ -132,22 +162,22 @@ export const CheckoutTransition = ({ burgerState, onComplete }: CheckoutTransiti
             key={i}
             className="absolute rounded-full pointer-events-none"
             style={{
-              width:      b.r * 2,
-              height:     b.r * 2,
-              left:       `calc(50% + ${b.dx - b.r}px)`,
-              top:        `calc(50% + ${b.dy - b.r}px)`,
+              width: b.r * 2,
+              height: b.r * 2,
+              left: `calc(50% + ${b.dx - b.r}px)`,
+              top: `calc(50% + ${b.dy - b.r}px)`,
               background: '#09090b',
             }}
             initial={{ scale: 0, opacity: 0 }}
             animate={{
-              scale:   activeBites > i ? 1 : 0,
+              scale: activeBites > i ? 1 : 0,
               opacity: activeBites > i && phase === 'bites' ? 1 : 0,
-              x: recoil * 8,
+              x: recoil * SIZES.RECOIL_PX,
             }}
             transition={{
-              scale:   { type: 'spring', stiffness: 320, damping: 18 },
+              scale: SPRING.BITE_POP,
               opacity: { duration: phase === 'dissolve' ? 0.55 : 0.06 },
-              x:       { type: 'spring', stiffness: 600, damping: 14 },
+              x: SPRING.RECOIL,
             }}
           />
         ))}
@@ -160,7 +190,7 @@ export const CheckoutTransition = ({ burgerState, onComplete }: CheckoutTransiti
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: [0, 1, 1, 0] }}
               transition={{
-                scaleX:  { duration: 0.32, ease: 'easeOut' },
+                scaleX: { duration: 0.32, ease: 'easeOut' },
                 opacity: { duration: 0.5, times: [0, 0.2, 0.7, 1] },
               }}
               style={{ originX: 0.5 }}
@@ -169,7 +199,7 @@ export const CheckoutTransition = ({ burgerState, onComplete }: CheckoutTransiti
           )}
         </AnimatePresence>
 
-        {/* ── Calculating label (bites / dissolve) ── */}
+        {/* ── Calculating label ── */}
         <AnimatePresence>
           {(phase === 'bites' || phase === 'dissolve') && (
             <motion.p
@@ -199,7 +229,7 @@ export const CheckoutTransition = ({ burgerState, onComplete }: CheckoutTransiti
                   key={i}
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
+                  transition={{ duration: 0.7, ease: EASE.SNAPPY }}
                   className={line.className}
                 >
                   {line.text}
@@ -213,7 +243,7 @@ export const CheckoutTransition = ({ burgerState, onComplete }: CheckoutTransiti
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.55, ease: [0.25, 1, 0.5, 1] }}
+                    transition={{ duration: DUR.IMPACT, ease: EASE.SNAPPY }}
                     onClick={handleSeeImpact}
                     className="mt-4 px-8 py-3.5 bg-amber-500 text-zinc-950 font-black text-sm rounded-full tracking-wide hover:bg-amber-400 active:bg-amber-300 transition-colors"
                   >
@@ -236,7 +266,9 @@ export const CheckoutTransition = ({ burgerState, onComplete }: CheckoutTransiti
               transition={{ duration: 0.4 }}
               className="absolute inset-0 flex items-center justify-center"
             >
-              <div className="w-[340px] h-[440px] flex items-center justify-center">
+              <div
+                className={`w-[${SIZES.BURGER_CONTAINER_W}px] h-[${SIZES.BURGER_CONTAINER_H}px] flex items-center justify-center`}
+              >
                 <BurgerStack
                   burgerState={burgerState}
                   direction={1}
@@ -248,7 +280,6 @@ export const CheckoutTransition = ({ burgerState, onComplete }: CheckoutTransiti
             </motion.div>
           )}
         </AnimatePresence>
-
       </div>
     </motion.div>
   );

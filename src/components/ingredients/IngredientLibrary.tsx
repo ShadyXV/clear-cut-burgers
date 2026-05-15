@@ -442,6 +442,63 @@ const PepperCheese = () => (
     }
   />
 );
+const CashewCheese = () => (
+  <CheeseBase
+    fill="#F0D9A8"
+    droopFill="#C9A870"
+    specks={
+      <g>
+        <g fill="#C8935A" opacity="0.5">
+          <circle cx="90" cy="58" r="2.5" />
+          <circle cx="145" cy="48" r="2" />
+          <circle cx="200" cy="62" r="2.5" />
+          <circle cx="125" cy="80" r="2" />
+          <circle cx="230" cy="72" r="2.5" />
+          <circle cx="170" cy="88" r="2" />
+          <circle cx="75" cy="78" r="2" />
+          <circle cx="260" cy="60" r="2" />
+        </g>
+        <g fill="#8A7A50" opacity="0.35">
+          <circle cx="110" cy="65" r="1.2" />
+          <circle cx="175" cy="55" r="1" />
+          <circle cx="215" cy="80" r="1.2" />
+          <circle cx="155" cy="90" r="1" />
+          <circle cx="245" cy="68" r="1.2" />
+        </g>
+      </g>
+    }
+  />
+);
+
+const VeganSmoked = () => (
+  <CheeseBase
+    fill="#C87B3A"
+    droopFill="#8E4E1A"
+    specks={
+      <g>
+        <g fill="#3D1A05" opacity="0.35">
+          <circle cx="85" cy="55" r="2" />
+          <circle cx="140" cy="46" r="1.5" />
+          <circle cx="195" cy="60" r="2" />
+          <circle cx="120" cy="82" r="1.5" />
+          <circle cx="235" cy="70" r="2" />
+          <circle cx="165" cy="90" r="1.5" />
+          <circle cx="70" cy="75" r="1.5" />
+          <circle cx="255" cy="58" r="1.5" />
+          <circle cx="220" cy="88" r="2" />
+        </g>
+        <g fill="#E09A60" opacity="0.4">
+          <circle cx="105" cy="62" r="1.2" />
+          <circle cx="170" cy="52" r="1" />
+          <circle cx="210" cy="76" r="1.2" />
+          <circle cx="150" cy="88" r="1" />
+          <circle cx="248" cy="65" r="1" />
+        </g>
+      </g>
+    }
+  />
+);
+
 const Mozzarella = () => (
   <g>
     <path
@@ -738,6 +795,8 @@ export const SvgMap: Record<string, React.FC> = {
   emmental: Emmental,
   pepperCheese: PepperCheese,
   mozzarella: Mozzarella,
+  cashewCheese: CashewCheese,
+  veganSmoked: VeganSmoked,
 
   tomato: Tomato,
   redOnion: RedOnion,

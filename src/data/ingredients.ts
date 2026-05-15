@@ -75,6 +75,8 @@ export const INGREDIENTS: Record<string, Ingredient> = {
 
   // Cheese
   cheddar: { id: 'cheddar', name: 'Cheddar', category: 'cheese', thickness: 3 },
+  cashewCheese: { id: 'cashewCheese', name: 'Cashew Cheese', category: 'cheese', thickness: 3 },
+  veganSmoked: { id: 'veganSmoked', name: 'Vegan Smoked', category: 'cheese', thickness: 3 },
   emmental: {
     id: 'emmental',
     name: 'Emmental',
@@ -170,7 +172,7 @@ export const INGREDIENTS: Record<string, Ingredient> = {
 export const CATEGORIES: Record<Category, string[]> = {
   bun: ['brioche', 'sesame', 'paprika', 'cheeseTopped', 'chiveSesame'],
   protein: ['beefPatty', 'grilledChicken', 'crispyChicken', 'blackBeanPatty', 'chickpeaPatty', 'mushroomPatty'],
-  cheese: ['cheddar', 'emmental', 'mozzarella', 'pepperCheese'],
+  cheese: ['cheddar', 'emmental', 'mozzarella', 'pepperCheese', 'cashewCheese', 'veganSmoked'],
   topping: [
     'tomato',
     'redOnion',

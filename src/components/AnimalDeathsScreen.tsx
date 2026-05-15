@@ -7,6 +7,7 @@ import { SourcesTooltip } from './SourcesTooltip';
 import { RotatingFact } from './RotatingFact';
 import { useCanvasAnimation, VIS } from '../hooks/useCanvasAnimation';
 import { useBurgerStore } from '../store/useBurgerStore';
+import { isVeganBurger } from '../utils/vegan';
 
 function formatCount(n: number): string {
   if (n >= 1_000_000_000) return (n / 1_000_000_000).toFixed(2) + 'B';
@@ -17,12 +18,11 @@ function formatCount(n: number): string {
 
 export const AnimalDeathsScreen = () => {
   const navigate = useNavigate();
-  const { burgerState, setSlot, resetForBuilder } = useBurgerStore();
+  const { burgerState, switchToPlantBased } = useBurgerStore();
 
   const onBack = () => navigate('/impact');
   const onSwitchToPlant = () => {
-    setSlot('protein1', 'blackBeanPatty', 1);
-    resetForBuilder();
+    switchToPlantBased();
     navigate('/build');
   };
 
@@ -39,10 +39,7 @@ export const AnimalDeathsScreen = () => {
   );
 
   const proteinId = burgerState.protein1;
-  const isPlantBurger =
-    proteinId === 'blackBeanPatty' ||
-    proteinId === 'chickpeaPatty' ||
-    proteinId === 'mushroomPatty';
+  const isPlantBurger = isVeganBurger(burgerState);
   const phase =
     elapsedSec < 10 ? 1 : elapsedSec < 22 ? 2 : elapsedSec < 40 ? 3 : 4;
   const iconOpacity = phase < 4 ? 1 : Math.max(0.15, 1 - knifeProgress * 1.1);

@@ -127,6 +127,9 @@ export const IMPACT_DATA: Record<string, ImpactMetric> = {
     trees: 0,
     feed: 0.36,
   },
+  // Plant-based cheeses — cashew/coconut base, zero methane, zero feed crops
+  cashewCheese: { co2: 0.28, water: 95, land: 0.35, methane: 0, trees: 0, feed: 0 },
+  veganSmoked: { co2: 0.22, water: 80, land: 0.28, methane: 0, trees: 0, feed: 0 },
 
   // Toppings
   tomato: { co2: 0.04, water: 13, land: 0.02, methane: 0.0, trees: 0, feed: 0 },

@@ -12,6 +12,7 @@ import { BurgerStack } from './components/BurgerStack';
 import { CheckoutTransition } from './components/CheckoutTransition';
 import { SplashScreen } from './components/SplashScreen';
 import { useBurgerStore } from './store/useBurgerStore';
+import { isVeganBurger } from './utils/vegan';
 
 type AppView = 'splash' | 'build' | 'checkout' | 'compare' | 'impact' | 'deaths';
 
@@ -23,18 +24,6 @@ const VIEW_DEPTH: Record<AppView, number> = {
   impact: 4,
   deaths: 5,
 };
-
-const ANIMAL_PROTEINS = new Set(['beefPatty', 'grilledChicken', 'crispyChicken']);
-
-function isVeganBurger(state: Record<string, string | null>): boolean {
-  const proteinSlots = ['protein1', 'protein2', 'protein3'];
-  const hasAnyProtein = proteinSlots.some((s) => state[s]);
-  const hasAnimalProtein = proteinSlots.some(
-    (s) => state[s] && ANIMAL_PROTEINS.has(state[s]!),
-  );
-  const hasBacon = Object.values(state).includes('bacon');
-  return hasAnyProtein && !hasAnimalProtein && !hasBacon;
-}
 
 export default function App() {
   const location = useLocation();
@@ -63,10 +52,10 @@ export default function App() {
     recoil,
     heroOpacity,
     setIsAssembled,
-    setSlot,
     setRecoil,
     setHeroOpacity,
     resetForBuilder,
+    switchToPlantBased,
   } = useBurgerStore();
 
   useEffect(() => {
@@ -125,11 +114,10 @@ export default function App() {
               SEE THE ANIMAL TOLL
             </button>
           ) : view === 'deaths' ? (
-            !['blackBeanPatty', 'chickpeaPatty', 'mushroomPatty'].includes(burgerState.protein1 ?? '') && (
+            !isVeganBurger(burgerState) && (
               <button
                 onClick={() => {
-                  setSlot('protein1', 'blackBeanPatty', 1);
-                  resetForBuilder();
+                  switchToPlantBased();
                   navigate('/build');
                 }}
                 className="px-5 py-2 border border-amber-500 text-amber-400 rounded-full text-sm font-bold hover:bg-amber-500/10 transition-colors flex items-center gap-2"

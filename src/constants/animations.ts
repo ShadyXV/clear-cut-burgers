@@ -5,7 +5,7 @@ export const SPRING = {
   SMOOTH: { type: 'spring' as const, stiffness: 200, damping: 25 }, // impact row entrance
   RESPONSIVE: { type: 'spring' as const, stiffness: 300, damping: 30 }, // ingredient swap
   RECOIL: { type: 'spring' as const, stiffness: 600, damping: 14 }, // bite recoil
-  HERO: { type: 'spring' as const, stiffness: 80, damping: 20 }, // hero burger entrance
+  HERO: { type: 'spring' as const, stiffness: 80, damping: 24 }, // hero burger entrance
   BITE_POP: { type: 'spring' as const, stiffness: 320, damping: 18 }, // bite circle pop
   FOOTER: { type: 'spring' as const, stiffness: 240, damping: 28 }, // impact footer
   BUTTON: { type: 'spring' as const, stiffness: 400, damping: 20 }, // splash button gesture
@@ -23,20 +23,20 @@ export const DUR = {
   FAST: 0.14, // tab switch
   NAV: 0.35, // overlay fade, stat pill
   IMPACT: 0.55, // impact screen entrance from builder
-  SLIDE: 0.75, // nav bar + editor slide during checkout
+  SLIDE: 1.2, // nav bar + editor slide during checkout
   SPLASH: 0.62, // splash exit
 } as const;
 
 // Checkout phase timeline — all values in milliseconds
 export const CHECKOUT_TIMELINE = {
-  BITES_START: 650,
+  BITES_START: 1500,
   BITE_INTERVALS: [0, 380, 760, 1140] as const,
   RECOIL_RESET_MS: 200,
-  DISSOLVE: 2200,
-  BLANK: 2700,
-  TEXT_START: 3200,
-  TEXT_LINE_MS: [3350, 3850, 4700, 5400, 5950] as const,
-  BUTTON: 6600,
+  DISSOLVE: 3000,
+  BLANK: 3500,
+  TEXT_START: 4000,
+  TEXT_LINE_MS: [4150, 4650, 5500, 6200, 6750] as const,
+  BUTTON: 7400,
   REASSEMBLY_MS: 1400, // delay from button click → onComplete()
 } as const;
 

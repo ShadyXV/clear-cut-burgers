@@ -31,6 +31,9 @@ export default function App() {
   const [prevView, setPrevView] = useState<AppView>('builder');
   // isDeparting drives all departure animation; checkout overlay lives inside builder.
   const [isDeparting, setIsDeparting] = useState(false);
+  const [isAssembled, setIsAssembled] = useState(false);
+  const [recoil, setRecoil] = useState(0);
+  const [heroOpacity, setHeroOpacity] = useState(1);
 
   // Initialize with a random non-vegan burger
   const initialBurger = useMemo(() => generateRandomBurgerState(), []);
@@ -40,16 +43,26 @@ export default function App() {
   const navigateTo = (next: AppView) => {
     setPrevView(view);
     setView(next);
+    // Reset assembly state when coming back to builder
+    if (next === 'builder') {
+      setIsAssembled(false);
+      setIsDeparting(false);
+      setRecoil(0);
+      setHeroOpacity(1);
+    }
   };
 
   const handleCheckoutPress = () => {
     if (view !== 'builder' || isDeparting) return;
-    setIsDeparting(true);
+    setIsAssembled(true);
+    // Delay departure slightly so it collapses first, then moves
+    setTimeout(() => {
+      setIsDeparting(true);
+    }, 400);
   };
 
   // Called by CheckoutTransition after all animation phases are done.
   const handleCheckoutComplete = () => {
-    setIsDeparting(false);
     navigateTo('impact');
   };
 
@@ -105,6 +118,33 @@ export default function App() {
 
         {/* ── Main workspace ── */}
         <main className="flex-1 flex flex-col overflow-hidden relative z-0 min-h-0">
+          {/* THE HERO BURGER - Truly persistent across all views */}
+          <div className="absolute inset-x-0 top-0 h-[54%] pointer-events-none flex flex-col items-center justify-end overflow-visible">
+            <motion.div
+              style={{ zIndex: isDeparting ? 40 : 10 }}
+              animate={{
+                y: view !== 'builder' ? '100vh' : isDeparting ? '20vh' : 0,
+                scale: isDeparting ? 1.15 : 1,
+                x: recoil * 8,
+                opacity: view !== 'builder' ? 0 : isDeparting ? heroOpacity : 1,
+              }}
+              transition={{
+                y: SPRING.HERO,
+                scale: SPRING.HERO,
+                x: SPRING.RECOIL,
+                opacity: { duration: 0.4 },
+              }}
+              className="flex items-end justify-center pb-4"
+            >
+              <BurgerStack
+                burgerState={burgerState}
+                direction={direction}
+                isAssembled={isAssembled}
+                isCompact
+              />
+            </motion.div>
+          </div>
+
           <AnimatePresence mode="wait" initial={false} custom={slideDir}>
             {view === 'builder' && (
               <motion.div
@@ -117,28 +157,15 @@ export default function App() {
                 transition={SPRING.VIEW}
                 className="absolute inset-0 flex flex-col"
               >
-                {/* ── Burger preview ── */}
-                <div className="h-[54%] shrink-0 relative flex items-center justify-center bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-900 to-black overflow-hidden">
-                  {/* Idle burger — fades as the hero takes over */}
-                  <motion.div
-                    animate={{ opacity: isDeparting ? 0 : 1 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute inset-0 flex justify-center items-end overflow-hidden"
-                  >
-                    <motion.div layoutId="hero-burger">
-                      <BurgerStack
-                        burgerState={burgerState}
-                        direction={direction}
-                        isAssembled={false}
-                        isCompact
-                      />
-                    </motion.div>
-                  </motion.div>
-                </div>
+                {/* ── Burger preview area (now just a background for the persistent burger) ── */}
+                <div className="h-[54%] shrink-0 relative flex items-center justify-center bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-900 to-black overflow-hidden" />
 
                 {/* ── Editor — slides down off screen during departure ── */}
                 <motion.div
-                  animate={{ y: isDeparting ? '100%' : '0%' }}
+                  animate={{
+                    y: isDeparting ? '100%' : '0%',
+                    opacity: isDeparting ? 0 : 1,
+                  }}
                   transition={{ duration: DUR.SLIDE, ease: EASE.SNAPPY }}
                   className="flex-1 overflow-hidden flex flex-col min-h-0"
                 >
@@ -209,6 +236,10 @@ export default function App() {
                 key="checkout-overlay"
                 burgerState={burgerState}
                 onComplete={handleCheckoutComplete}
+                onStateChange={(r, o) => {
+                  setRecoil(r);
+                  setHeroOpacity(o);
+                }}
               />
             )}
           </AnimatePresence>

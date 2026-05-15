@@ -176,7 +176,7 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
             BUILD YOUR
           </p>
           <p className="text-5xl font-black italic text-amber-500 leading-none tracking-tight drop-shadow-[0_0_30px_rgba(245,158,11,0.25)]">
-            CLEAN CUT.
+            OWN BURGER.
           </p>
         </motion.div>
 
@@ -207,7 +207,7 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
             transition={SPRING.BUTTON}
             className="px-9 py-3.5 bg-amber-500 text-zinc-950 font-black text-sm rounded-full tracking-wide transition-colors shadow-[0_8px_30px_rgba(245,158,11,0.25)] disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            BUILD MY BURGER →
+            START →
           </motion.button>
         </motion.div>
       </motion.div>

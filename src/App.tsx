@@ -119,11 +119,16 @@ export default function App() {
         {/* ── Main workspace ── */}
         <main className="flex-1 flex flex-col overflow-hidden relative z-0 min-h-0">
           {/* THE HERO BURGER - Truly persistent across all views */}
-          <div className="absolute inset-x-0 top-0 h-[54%] pointer-events-none flex flex-col items-center justify-end overflow-visible">
+          <div className="absolute inset-0 pointer-events-none flex justify-center overflow-visible z-0">
             <motion.div
-              style={{ zIndex: isDeparting ? 40 : 10 }}
+              layout
+              style={{
+                zIndex: isDeparting ? 40 : 10,
+                position: 'absolute',
+                bottom: '50%',
+              }}
               animate={{
-                y: view !== 'builder' ? '100vh' : isDeparting ? '20vh' : 0,
+                y: view !== 'builder' ? '100vh' : isDeparting ? '50%' : '2vh',
                 scale: isDeparting ? 1.15 : 1,
                 x: recoil * 8,
                 opacity: view !== 'builder' ? 0 : isDeparting ? heroOpacity : 1,
@@ -134,7 +139,7 @@ export default function App() {
                 x: SPRING.RECOIL,
                 opacity: { duration: 0.4 },
               }}
-              className="flex items-end justify-center pb-4"
+              className="flex items-end justify-center"
             >
               <BurgerStack
                 burgerState={burgerState}

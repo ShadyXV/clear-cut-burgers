@@ -29,14 +29,14 @@ export const DUR = {
 
 // Checkout phase timeline — all values in milliseconds
 export const CHECKOUT_TIMELINE = {
-  BITES_START: 1500,
-  BITE_INTERVALS: [0, 380, 760, 1140] as const,
-  RECOIL_RESET_MS: 200,
-  DISSOLVE: 3000,
-  BLANK: 3500,
-  TEXT_START: 4000,
-  TEXT_LINE_MS: [4150, 4650, 5500, 6200, 6750] as const,
-  BUTTON: 7400,
+  BITES_START: 600,
+  BITE_INTERVALS: [0, 240, 480, 720] as const,
+  RECOIL_RESET_MS: 150,
+  DISSOLVE: 2000,
+  BLANK: 2000,
+  TEXT_START: 2500,
+  TEXT_LINE_MS: [2650, 3150, 4000, 4700, 5250] as const,
+  BUTTON: 6000,
   REASSEMBLY_MS: 1400, // delay from button click → onComplete()
 } as const;
 

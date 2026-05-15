@@ -73,7 +73,7 @@ export const BurgerStack = ({
               layout: { ...SPRING.RESPONSIVE, bounce: 0.2, duration: 0.6 },
             }}
           >
-            <AnimatePresence mode="popLayout" custom={direction}>
+            <AnimatePresence custom={direction}>
               <motion.div
                 key={ingredientId}
                 custom={direction}

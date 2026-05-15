@@ -64,6 +64,7 @@ export default function App() {
   // Called by CheckoutTransition after all animation phases are done.
   const handleCheckoutComplete = () => {
     navigateTo('impact');
+    setIsDeparting(false);
   };
 
   const slideDir = VIEW_DEPTH[view] > VIEW_DEPTH[prevView] ? 1 : -1;

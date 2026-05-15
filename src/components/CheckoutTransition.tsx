@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { SPRING, EASE, DUR, CHECKOUT_TIMELINE } from '../constants/animations';
+import { SPRING, DUR, CHECKOUT_TIMELINE } from '../constants/animations';
 
 type Phase =
   | 'arriving'
@@ -26,16 +26,17 @@ const BITES = [
 const TEXT_LINES: { text: string; className: string }[] = [
   {
     text: "WHAT THE MENU DOESN'T SHOW",
-    className:
-      'text-xs font-black uppercase tracking-[0.25em] text-zinc-600',
+    className: 'text-xs font-black uppercase tracking-[0.25em] text-zinc-600',
   },
   {
     text: 'Animal agriculture occupies 83% of global farmland',
-    className: 'text-3xl font-black leading-tight text-zinc-100 text-center px-4',
+    className:
+      'text-3xl font-black leading-tight text-zinc-100 text-center px-4',
   },
   {
     text: "to produce just 18% of the world's calories.",
-    className: 'text-2xl font-black leading-snug text-zinc-400 text-center px-4',
+    className:
+      'text-2xl font-black leading-snug text-zinc-400 text-center px-4',
   },
   {
     text: 'The environmental cost never appears on a menu.',
@@ -132,9 +133,9 @@ export const CheckoutTransition = ({
           animate={{
             opacity:
               phase === 'dissolve' ||
-                phase === 'blank' ||
-                phase === 'text' ||
-                phase === 'reassemble'
+              phase === 'blank' ||
+              phase === 'text' ||
+              phase === 'reassemble'
                 ? 1
                 : 0.4,
           }}
@@ -160,9 +161,9 @@ export const CheckoutTransition = ({
                   scale: activeBites > i ? 1 : 0,
                   opacity:
                     activeBites > i &&
-                      (phase === 'bites' ||
-                        phase === 'dissolve' ||
-                        phase === 'blank')
+                    (phase === 'bites' ||
+                      phase === 'dissolve' ||
+                      phase === 'blank')
                       ? 1
                       : 0,
                 }}
@@ -209,7 +210,7 @@ export const CheckoutTransition = ({
                   initial={{ opacity: 0, y: 16 }}
                   animate={{
                     opacity: i < visibleLines ? 1 : 0,
-                    y: i < visibleLines ? 0 : 16
+                    y: i < visibleLines ? 0 : 16,
                   }}
                   transition={{
                     duration: 0.9,

@@ -247,7 +247,7 @@ export const AnimalDeathsScreen = ({ burgerState, onBack, onSwitchToPlant }: Ani
           }
 
           // Phase 4: drift toward centre
-          line.x = lerp(line.baseX, cx + (line.baseX - cx) * 0.15, kp);
+          line.x = lerp(line.baseX, cx + (line.baseX - cx) * 0.30, kp);
 
           const endY = BY + line.growthPx;
 
@@ -402,7 +402,7 @@ export const AnimalDeathsScreen = ({ burgerState, onBack, onSwitchToPlant }: Ani
           })}
         </div>
 
-        {/* Knife blade SVG overlay — fades in during phase 4 */}
+        {/* Horizontal butcher's cleaver — sits with cutting edge at the blood baseline */}
         <AnimatePresence>
           {phase >= 4 && (
             <motion.svg
@@ -410,46 +410,109 @@ export const AnimalDeathsScreen = ({ burgerState, onBack, onSwitchToPlant }: Ani
               initial={{ opacity: 0 }}
               animate={{ opacity: Math.min(1, knifeProgress * 1.3) }}
               transition={{ duration: 0.6 }}
-              viewBox="0 0 200 400"
+              viewBox="0 0 1600 400"
               preserveAspectRatio="xMidYMid meet"
-              className="absolute top-[10%] left-1/2 -translate-x-1/2 h-[55%] pointer-events-none"
-              style={{ filter: 'drop-shadow(0 0 18px rgba(220, 38, 38, 0.35))' }}
+              className="absolute w-3/4 left-1/2 -translate-x-1/2 pointer-events-none"
+              style={{
+                bottom: '88%',
+                filter: 'drop-shadow(0 8px 32px rgba(0,0,0,0.98)) drop-shadow(0 2px 6px rgba(0,0,0,0.85))',
+              }}
             >
               <defs>
-                <linearGradient id="bladeFace" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%"   stopColor="rgba(40, 40, 50, 0.85)" />
-                  <stop offset="35%"  stopColor="rgba(140, 145, 160, 0.75)" />
-                  <stop offset="55%"  stopColor="rgba(210, 215, 230, 0.92)" />
-                  <stop offset="80%"  stopColor="rgba(120, 125, 140, 0.78)" />
-                  <stop offset="100%" stopColor="rgba(40, 40, 50, 0.85)" />
+                {/* Blade face: dark spine → bright chrome reflection → edge */}
+                <linearGradient id="kBladeFace" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%"   stopColor="#1e2028" />
+                  <stop offset="14%"  stopColor="#4e5468" />
+                  <stop offset="36%"  stopColor="#aab2c4" />
+                  <stop offset="54%"  stopColor="#d0d7e4" />
+                  <stop offset="76%"  stopColor="#72798a" />
+                  <stop offset="100%" stopColor="#383c4a" />
                 </linearGradient>
-                <linearGradient id="bladeEdge" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%"   stopColor="rgba(190, 195, 210, 0.0)" />
-                  <stop offset="40%"  stopColor="rgba(230, 235, 250, 0.4)" />
-                  <stop offset="100%" stopColor="rgba(240, 245, 255, 0.85)" />
+                {/* Edge glint: bright silver line across the cutting edge */}
+                <linearGradient id="kEdgeGlint" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%"   stopColor="rgba(190,210,255,0.0)" />
+                  <stop offset="3%"   stopColor="rgba(228,240,255,0.88)" />
+                  <stop offset="50%"  stopColor="rgba(248,254,255,1.0)" />
+                  <stop offset="97%"  stopColor="rgba(228,240,255,0.82)" />
+                  <stop offset="100%" stopColor="rgba(190,210,255,0.0)" />
                 </linearGradient>
-                <linearGradient id="bloodSmear" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%"   stopColor="rgba(120, 18, 18, 0.0)" />
-                  <stop offset="40%"  stopColor="rgba(170, 25, 25, 0.45)" />
-                  <stop offset="80%"  stopColor="rgba(220, 38, 38, 0.7)" />
-                  <stop offset="100%" stopColor="rgba(220, 38, 38, 0.85)" />
+                {/* Blood smear: heavy near handle (right), fades toward tip (left) */}
+                <linearGradient id="kBloodSmear" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%"   stopColor="rgba(130,12,12,0.0)" />
+                  <stop offset="20%"  stopColor="rgba(155,18,18,0.18)" />
+                  <stop offset="62%"  stopColor="rgba(198,30,30,0.52)" />
+                  <stop offset="100%" stopColor="rgba(218,36,36,0.82)" />
+                </linearGradient>
+                {/* Handle: dark rosewood */}
+                <linearGradient id="kHandle" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%"   stopColor="#160b05" />
+                  <stop offset="28%"  stopColor="#38190a" />
+                  <stop offset="58%"  stopColor="#422012" />
+                  <stop offset="100%" stopColor="#160b05" />
+                </linearGradient>
+                {/* Bolster: polished steel */}
+                <linearGradient id="kBolster" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%"   stopColor="#2e313b" />
+                  <stop offset="38%"  stopColor="#82899a" />
+                  <stop offset="54%"  stopColor="#a4acbc" />
+                  <stop offset="100%" stopColor="#2e313b" />
                 </linearGradient>
               </defs>
-              {/* Blade shape: rectangular tapering to a pointed tip */}
-              <path d="M 60 0 L 140 0 L 140 320 L 100 380 L 60 320 Z" fill="url(#bladeFace)" />
-              {/* Sharp edge highlight */}
-              <path d="M 65 4 L 135 4 L 135 318 L 100 374 L 65 318 Z" fill="none" stroke="url(#bladeEdge)" strokeWidth="0.8" />
-              {/* Reflection slash near upper third */}
-              <path d="M 70 80 L 88 100 L 86 130 L 68 110 Z" fill="rgba(255,255,255,0.1)" />
-              {/* Blood smear over the blade */}
-              <path d="M 60 0 L 140 0 L 140 320 L 100 380 L 60 320 Z" fill="url(#bloodSmear)" opacity={Math.min(1, knifeProgress * 1.4)} />
-              {/* Drips clinging to the blade at various heights */}
-              <g fill="rgba(180, 22, 22, 0.85)" opacity={Math.min(1, knifeProgress * 1.2)}>
-                <ellipse cx="78" cy="240" rx="2.5" ry="6" />
-                <ellipse cx="122" cy="280" rx="3" ry="8" />
-                <ellipse cx="100" cy="320" rx="2.5" ry="7" />
-                <ellipse cx="90" cy="200" rx="2" ry="5" />
+
+              {/* ── BLADE (cleaver — wide rectangular body) ── */}
+              {/* Spine at top, flat cutting edge at bottom, blunt tip on left */}
+              <rect x="58" y="18" width="1150" height="366" fill="url(#kBladeFace)" />
+
+              {/* Spine cap — thick dark bar along the top edge */}
+              <rect x="58" y="18" width="1150" height="8" fill="rgba(12,14,20,0.9)" />
+
+              {/* Blade face reflections — light catching the flat of the steel */}
+              <path d="M 155,48 L 435,48 L 412,225 L 132,225 Z" fill="rgba(255,255,255,0.068)" />
+              <path d="M 525,36 L 720,36 L 704,194 L 509,194 Z" fill="rgba(255,255,255,0.044)" />
+              <path d="M 790,52 L 920,52 L 908,182 L 778,182 Z" fill="rgba(255,255,255,0.030)" />
+
+              {/* Blood smear on blade face */}
+              <rect
+                x="58" y="18" width="1150" height="366"
+                fill="url(#kBloodSmear)"
+                opacity={Math.min(1, knifeProgress * 1.4)}
+              />
+
+              {/* Cutting edge — bright silver line, the visible sharp part */}
+              <line x1="58" y1="384" x2="1208" y2="384" stroke="url(#kEdgeGlint)" strokeWidth="4" />
+
+              {/* ── BOLSTER (steel collar between blade and handle) ── */}
+              <rect x="1208" y="18" width="48" height="366" fill="url(#kBolster)" />
+              <line x1="1232" y1="18" x2="1232" y2="384" stroke="rgba(255,255,255,0.16)" strokeWidth="1" />
+
+              {/* ── HANDLE (full-tang rosewood grip) ── */}
+              <path
+                d="M 1256,40 L 1580,58 Q 1600,100, 1600,201 Q 1600,302, 1580,344 L 1256,362 Z"
+                fill="url(#kHandle)"
+              />
+
+              {/* Wood grain */}
+              <g stroke="rgba(255,210,160,0.055)" strokeWidth="1.3" fill="none">
+                <line x1="1260" y1="88"  x2="1588" y2="104" />
+                <line x1="1260" y1="128" x2="1594" y2="141" />
+                <line x1="1260" y1="168" x2="1598" y2="178" />
+                <line x1="1260" y1="201" x2="1600" y2="201" />
+                <line x1="1260" y1="234" x2="1598" y2="224" />
+                <line x1="1260" y1="274" x2="1594" y2="261" />
+                <line x1="1260" y1="314" x2="1588" y2="298" />
               </g>
+
+              {/* Rivets (3 brass pins through full tang) */}
+              {([1326, 1432, 1538] as const).map(cx => (
+                <g key={cx}>
+                  <circle cx={cx} cy={201} r={18} fill="rgba(70,60,46,0.94)" />
+                  <circle cx={cx} cy={201} r={18} fill="none" stroke="rgba(106,93,72,0.68)" strokeWidth="2.2" />
+                  <circle cx={cx - 4} cy={196} r={7} fill="rgba(138,122,96,0.30)" />
+                </g>
+              ))}
+
+              {/* Shadow at handle-bolster join */}
+              <rect x="1256" y="40" width="6" height="322" fill="rgba(0,0,0,0.52)" />
             </motion.svg>
           )}
         </AnimatePresence>

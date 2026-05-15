@@ -42,12 +42,6 @@ export const SplashScreen = ({ onStart }: { onStart: () => void }) => (
         BUILD MY BURGER →
       </motion.button>
 
-      {/* Status pill */}
-      <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-zinc-600 font-bold">
-        <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.9)]" />
-        2D Render Engine Active
-      </div>
-
     </div>
   </motion.div>
 );

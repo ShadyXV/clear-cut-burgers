@@ -90,11 +90,7 @@ export default function App() {
           </span>
         </div>
         <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-zinc-400">
-            <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,1)]" />
-            2D RENDER ENGINE ACTIVE
-          </div>
-          <button
+<button
             onClick={() => {
               if (view === 'builder') handleCheckoutPress();
               else navigateTo('builder');

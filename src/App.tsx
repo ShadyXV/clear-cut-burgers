@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Skull } from 'lucide-react';
+import { Skull, Sprout } from 'lucide-react';
 import { useLocation, useNavigate, useOutlet } from 'react-router-dom';
 import { SPRING, EASE, DUR } from './constants/animations';
 import { BurgerStack } from './components/BurgerStack';
@@ -48,6 +48,7 @@ export default function App() {
     recoil,
     heroOpacity,
     setIsAssembled,
+    setSlot,
     setRecoil,
     setHeroOpacity,
     resetForBuilder,
@@ -99,11 +100,25 @@ export default function App() {
           {view === 'impact' ? (
             <button
               onClick={() => navigate('/deaths')}
-              className="px-5 py-2 bg-red-950/30 border border-red-900/50 text-red-400 rounded-full text-sm font-bold hover:bg-red-950/50 transition-colors flex items-center gap-2"
+              className="px-5 py-2 border border-amber-500 text-amber-400 rounded-full text-sm font-bold hover:bg-amber-500/10 transition-colors flex items-center gap-2"
             >
               <Skull size={14} />
               SEE THE ANIMAL TOLL
             </button>
+          ) : view === 'deaths' ? (
+            burgerState.protein1 !== 'blackBeanPatty' && (
+              <button
+                onClick={() => {
+                  setSlot('protein1', 'blackBeanPatty', 1);
+                  resetForBuilder();
+                  navigate('/build');
+                }}
+                className="px-5 py-2 border border-amber-500 text-amber-400 rounded-full text-sm font-bold hover:bg-amber-500/10 transition-colors flex items-center gap-2"
+              >
+                <Sprout size={14} />
+                Try a plant-based burger
+              </button>
+            )
           ) : (
             <button
               onClick={() => {

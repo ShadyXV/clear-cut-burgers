@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, Sprout } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { SPECIES } from '../data/animalDeaths';
 import { ICONS_BY_SPECIES_ID } from './AnimalIcons';
@@ -26,7 +26,7 @@ export const AnimalDeathsScreen = () => {
     navigate('/build');
   };
 
-  const { canvasRef, wrapRef, elapsedSec, knifeProgress, showPlantCTA } =
+  const { canvasRef, wrapRef, elapsedSec, knifeProgress } =
     useCanvasAnimation();
 
   const activeIngs = new Set(
@@ -330,23 +330,6 @@ export const AnimalDeathsScreen = () => {
           )}
         </AnimatePresence>
 
-        {/* Plant CTA */}
-        <AnimatePresence>
-          {showPlantCTA && !isPlantBurger && (
-            <motion.button
-              key="plant-cta"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.5 }}
-              onClick={onSwitchToPlant}
-              className="absolute bottom-4 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-950/80 border border-emerald-700/60 text-emerald-300 text-xs font-bold rounded-full hover:bg-emerald-900/80 hover:border-emerald-500 transition-colors shadow-xl backdrop-blur-sm"
-            >
-              <Sprout size={13} />
-              Try a plant-based burger
-            </motion.button>
-          )}
-        </AnimatePresence>
       </div>
 
       {/* Footer */}

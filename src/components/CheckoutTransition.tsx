@@ -44,6 +44,7 @@ export const CheckoutTransition = ({ burgerState, onComplete }: CheckoutTransiti
   const [activeBites, setActiveBites] = useState(0);
   const [recoil, setRecoil]           = useState(0);
   const [visibleLines, setVisibleLines] = useState(0);
+  const [showButton, setShowButton]     = useState(false);
   const timersRef = useRef<number[]>([]);
 
   useEffect(() => {
@@ -70,13 +71,16 @@ export const CheckoutTransition = ({ burgerState, onComplete }: CheckoutTransiti
     t(() => setVisibleLines(3),   4700);
     t(() => setVisibleLines(4),   5400);
     t(() => setVisibleLines(5),   5950);
-
-    // — burger reassembly —
-    t(() => setPhase('reassemble'), 6800);
-    t(() => onComplete(),           8200);
+    t(() => setShowButton(true),  6600);
 
     return () => { timersRef.current.forEach(clearTimeout); timersRef.current = []; };
   }, [onComplete]);
+
+  const handleSeeImpact = () => {
+    setShowButton(false);
+    setPhase('reassemble');
+    timersRef.current.push(window.setTimeout(() => onComplete(), 1400));
+  };
 
   const heroVisible  = phase === 'arriving' || phase === 'bites' || phase === 'dissolve';
   const heroOpacity  = phase === 'dissolve' ? 0 : 1;
@@ -201,6 +205,22 @@ export const CheckoutTransition = ({ burgerState, onComplete }: CheckoutTransiti
                   {line.text}
                 </motion.p>
               ))}
+
+              <AnimatePresence>
+                {showButton && (
+                  <motion.button
+                    key="see-impact"
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.55, ease: [0.25, 1, 0.5, 1] }}
+                    onClick={handleSeeImpact}
+                    className="mt-4 px-8 py-3.5 bg-amber-500 text-zinc-950 font-black text-sm rounded-full tracking-wide hover:bg-amber-400 active:bg-amber-300 transition-colors"
+                  >
+                    See the impact →
+                  </motion.button>
+                )}
+              </AnimatePresence>
             </motion.div>
           )}
         </AnimatePresence>

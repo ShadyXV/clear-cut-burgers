@@ -10,6 +10,7 @@ import { BurgerEditor } from './components/BurgerEditor';
 import { ImpactScreen } from './components/ImpactScreen';
 import { AnimalDeathsScreen } from './components/AnimalDeathsScreen';
 import { CheckoutTransition } from './components/CheckoutTransition';
+import { SplashScreen } from './components/SplashScreen';
 import { SlotKey } from './data/ingredients';
 
 // Checkout cinematic plays as an overlay inside the 'builder' view —
@@ -23,6 +24,7 @@ const VIEW_DEPTH: Record<AppView, number> = {
 };
 
 export default function App() {
+  const [showSplash, setShowSplash]   = useState(true);
   const [direction, setDirection]     = useState(1);
   const [view, setView]               = useState<AppView>('builder');
   const [prevView, setPrevView]       = useState<AppView>('builder');
@@ -227,6 +229,13 @@ export default function App() {
         </AnimatePresence>
 
       </main>
+
+      {/* Splash overlay — sits above everything, slides up on dismiss */}
+      <AnimatePresence>
+        {showSplash && (
+          <SplashScreen key="splash" onStart={() => setShowSplash(false)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

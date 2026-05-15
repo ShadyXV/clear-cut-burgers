@@ -19,7 +19,7 @@ export const SplashScreen = ({ onStart }: { onStart: () => void }) => (
           B
         </div>
         <span className="text-[11px] font-bold tracking-[0.22em] text-zinc-500 uppercase">
-          Stack Master Labs
+          Clean Cut Burgers
         </span>
       </div>
 
@@ -29,13 +29,13 @@ export const SplashScreen = ({ onStart }: { onStart: () => void }) => (
           BUILD YOUR
         </p>
         <p className="text-5xl font-black italic text-amber-500 leading-none tracking-tight">
-          PERFECT STACK.
+          CLEAN CUT.
         </p>
       </div>
 
       {/* Subtext */}
       <p className="text-sm text-zinc-500 leading-relaxed">
-        Pick your bun. Stack your protein.
+        Pick your bun. Select your protein.
         <br />
         Load up the toppings. Make it yours.
       </p>

@@ -94,7 +94,7 @@ export default function App() {
             B
           </div>
           <span className="text-lg font-semibold tracking-tight">
-            STACK MASTER <span className="text-zinc-500 font-normal">LABS</span>
+            CLEAN CUT <span className="text-zinc-500 font-normal">BURGERS</span>
           </span>
         </div>
         <div className="flex items-center gap-6">
@@ -134,7 +134,7 @@ export default function App() {
                   className="absolute top-4 left-6 pointer-events-none"
                 >
                   <h1 className="text-3xl font-black italic text-zinc-800 leading-none">
-                    THE GOLIATH
+                    THE CLEAN CUT
                   </h1>
                   <p className="text-amber-500/50 font-mono text-xs tracking-tighter">
                     ID: #BM-80822-XP

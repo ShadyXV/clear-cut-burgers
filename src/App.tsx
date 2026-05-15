@@ -5,6 +5,7 @@
 
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Skull } from 'lucide-react';
 import { SPRING, EASE, DUR } from './constants/animations';
 import { BurgerStack } from './components/BurgerStack';
 import { BurgerEditor } from './components/BurgerEditor';
@@ -104,16 +105,27 @@ export default function App() {
             </span>
           </div>
           <div className="flex items-center gap-6">
-            <button
-              onClick={() => {
-                if (view === 'builder') handleCheckoutPress();
-                else navigateTo('builder');
-              }}
-              disabled={isDeparting}
-              className="px-5 py-2 bg-zinc-100 text-zinc-950 rounded-full text-sm font-bold hover:bg-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              {navLabel}
-            </button>
+            {view === 'impact' ? (
+              <button
+                onClick={() => navigateTo('deaths')}
+                disabled={isDeparting}
+                className="px-5 py-2 bg-red-950/30 border border-red-900/50 text-red-400 rounded-full text-sm font-bold hover:bg-red-950/50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                <Skull size={14} />
+                SEE THE ANIMAL TOLL
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  if (view === 'builder') handleCheckoutPress();
+                  else navigateTo('builder');
+                }}
+                disabled={isDeparting}
+                className="px-5 py-2 bg-zinc-100 text-zinc-950 rounded-full text-sm font-bold hover:bg-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {navLabel}
+              </button>
+            )}
           </div>
         </motion.nav>
 

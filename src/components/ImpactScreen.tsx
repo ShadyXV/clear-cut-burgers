@@ -174,14 +174,7 @@ export const ImpactScreen = ({
         <p className="text-xs text-zinc-500 mt-1 leading-snug">
           {comparisonText}
         </p>
-        <button
-          onClick={onViewDeaths}
-          className="mt-4 w-full py-2.5 bg-red-950/30 border border-red-900/50 text-red-400 text-xs font-bold rounded-xl hover:bg-red-950/50 transition-colors flex items-center justify-center gap-1.5"
-        >
-          <Skull size={11} />
-          SEE THE ANIMAL TOLL →
-        </button>
-        <div className="mt-2 flex items-center justify-between">
+        <div className="mt-6 flex items-center justify-between">
           <button
             onClick={onBack}
             className="inline-flex items-center gap-2 px-5 py-2 border border-zinc-700 text-zinc-500 text-xs font-bold rounded-full hover:border-zinc-500 hover:text-zinc-300 transition-colors"

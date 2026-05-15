@@ -127,34 +127,6 @@ export default function App() {
             >
               {/* ── Burger preview ── */}
               <div className="h-[44%] shrink-0 relative flex items-center justify-center bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-900 to-black overflow-hidden">
-                {/* Decorative chrome fades out during departure */}
-                <motion.div
-                  animate={{ opacity: isDeparting ? 0 : 1 }}
-                  transition={{ duration: 0.3 }}
-                  className="absolute top-4 left-6 pointer-events-none"
-                >
-                  <h1 className="text-3xl font-black italic text-zinc-800 leading-none">
-                    THE CLEAN CUT
-                  </h1>
-                  <p className="text-amber-500/50 font-mono text-xs tracking-tighter">
-                    ID: #BM-80822-XP
-                  </p>
-                </motion.div>
-                <motion.div
-                  animate={{ opacity: isDeparting ? 0 : 1 }}
-                  transition={{ duration: 0.3 }}
-                  className="absolute bottom-4 right-6 text-right pointer-events-none"
-                >
-                  <p className="text-[10px] text-zinc-500 uppercase tracking-widest">
-                    Nutrition
-                  </p>
-                  <p className="text-xl font-bold">
-                    1,142{' '}
-                    <span className="text-sm font-normal text-zinc-400">
-                      KCAL
-                    </span>
-                  </p>
-                </motion.div>
 
                 {/* Idle burger — fades as the hero takes over */}
                 <motion.div

@@ -13,15 +13,28 @@ import { CheckoutTransition } from './components/CheckoutTransition';
 import { SplashScreen } from './components/SplashScreen';
 import { useBurgerStore } from './store/useBurgerStore';
 
-type AppView = 'splash' | 'build' | 'checkout' | 'impact' | 'deaths';
+type AppView = 'splash' | 'build' | 'checkout' | 'compare' | 'impact' | 'deaths';
 
 const VIEW_DEPTH: Record<AppView, number> = {
   splash: 0,
   build: 1,
   checkout: 2,
-  impact: 3,
-  deaths: 4,
+  compare: 3,
+  impact: 4,
+  deaths: 5,
 };
+
+const ANIMAL_PROTEINS = new Set(['beefPatty', 'grilledChicken', 'crispyChicken']);
+
+function isVeganBurger(state: Record<string, string | null>): boolean {
+  const proteinSlots = ['protein1', 'protein2', 'protein3'];
+  const hasAnyProtein = proteinSlots.some((s) => state[s]);
+  const hasAnimalProtein = proteinSlots.some(
+    (s) => state[s] && ANIMAL_PROTEINS.has(state[s]!),
+  );
+  const hasBacon = Object.values(state).includes('bacon');
+  return hasAnyProtein && !hasAnimalProtein && !hasBacon;
+}
 
 export default function App() {
   const location = useLocation();
@@ -35,9 +48,11 @@ export default function App() {
         ? 'build'
         : location.pathname === '/checkout'
           ? 'checkout'
-          : location.pathname === '/impact'
-            ? 'impact'
-            : 'deaths';
+          : location.pathname === '/compare'
+            ? 'compare'
+            : location.pathname === '/impact'
+              ? 'impact'
+              : 'deaths';
 
   const [prevView, setPrevView] = useState<AppView>(view);
 
@@ -74,7 +89,11 @@ export default function App() {
   };
 
   const handleCheckoutComplete = () => {
-    navigate('/impact', { state: { stagedEntry: true } });
+    if (isVeganBurger(burgerState)) {
+      navigate('/compare', { state: { stagedEntry: true } });
+    } else {
+      navigate('/impact', { state: { stagedEntry: true } });
+    }
   };
 
   return (
@@ -177,7 +196,7 @@ export default function App() {
                 ? { opacity: 0 }
                 : view === 'build'
                   ? { x: `${slideDir * 100}%`, opacity: 0 }
-                  : view === 'impact'
+                  : view === 'compare' || view === 'impact'
                     ? {
                         opacity: 0,
                         x:
@@ -191,12 +210,12 @@ export default function App() {
             exit={
               isSplash || view === 'build' || isCheckout
                 ? { opacity: 0, transition: { duration: DUR.INSTANT } }
-                : view === 'impact'
+                : view === 'compare' || view === 'impact'
                   ? { x: `${slideDir * -100}%`, opacity: 0 }
                   : { x: `${slideDir * 100}%`, opacity: 0 }
             }
             transition={
-              view === 'impact' &&
+              (view === 'compare' || view === 'impact') &&
               (prevView === 'build' || prevView === 'checkout')
                 ? { duration: DUR.IMPACT }
                 : SPRING.VIEW

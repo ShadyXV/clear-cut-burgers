@@ -3,14 +3,15 @@ import { motion } from 'motion/react';
 import { EASE, DUR, SPRING } from '../constants/animations';
 import { IngredientSvg } from './ingredients/IngredientLibrary';
 import { BURGER_SLOTS, INGREDIENTS } from '../data/ingredients';
+import { useBurgerStore } from '../store/useBurgerStore';
 
 interface SplashScreenProps {
   onStart: () => void;
-  burgerState: Record<string, string | null>;
 }
 
-export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
+export const SplashScreen = ({ onStart }: SplashScreenProps) => {
   const [isAssembling, setIsAssembling] = useState(false);
+  const { burgerState } = useBurgerStore();
 
   // Safely handle the transition with a timer and cleanup
   useEffect(() => {
@@ -34,7 +35,7 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
 
     let currentOffset = -totalHeight / 2;
 
-    return activeLayers.map((slot, index) => {
+    return activeLayers.map((slot) => {
       const ingredientId = burgerState[slot.id]!;
       const ingredient = INGREDIENTS[ingredientId];
       const thickness = ingredient?.thickness || 0;

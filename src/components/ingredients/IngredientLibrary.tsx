@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React from 'react';
 import { INGREDIENTS } from '../../data/ingredients';
 
@@ -9,7 +10,17 @@ const cpT = 24; // 80 - 140*0.4
 
 // --- Generic Helpers ---
 
-const IsometricBase = ({ thickness, shadow, front, top, specks }: any) => (
+const IsometricBase = ({
+  thickness,
+  front,
+  top,
+  specks,
+}: {
+  thickness?: number;
+  front?: string;
+  top?: string;
+  specks?: React.ReactNode;
+}) => (
   <g>
     {thickness > 0 && (
       <path
@@ -25,7 +36,15 @@ const IsometricBase = ({ thickness, shadow, front, top, specks }: any) => (
   </g>
 );
 
-const Dome = ({ front, top, texture }: any) => (
+const Dome = ({
+  front,
+  top,
+  texture,
+}: {
+  front?: string;
+  top?: string;
+  texture?: React.ReactNode;
+}) => (
   <g>
     <path
       d={`M ${left} ${cy} Q 160 ${cpB} ${right} ${cy} Q 160 -80 ${left} ${cy} Z`}
@@ -40,7 +59,17 @@ const Dome = ({ front, top, texture }: any) => (
   </g>
 );
 
-const CheeseBase = ({ fill, droopFill, holes, specks }: any) => (
+const CheeseBase = ({
+  fill,
+  droopFill,
+  holes,
+  specks,
+}: {
+  fill: string;
+  droopFill: string;
+  holes?: React.ReactNode;
+  specks?: React.ReactNode;
+}) => (
   <g>
     <path d="M 40 80 L 160 40 L 280 80 L 190 120 L 40 80 Z" fill={fill} />
     <path d="M 40 80 L 190 120 L 180 140 L 30 90 Z" fill={droopFill} />
@@ -76,14 +105,20 @@ const CheeseBase = ({ fill, droopFill, holes, specks }: any) => (
   </g>
 );
 
-const SauceDrip = ({ fill, droops }: any) => (
+const SauceDrip = ({
+  fill,
+  droops,
+}: {
+  fill: string;
+  droops: { x: number; y: number; w: number; h: number }[];
+}) => (
   <g>
     <path
       d={`M 35 80 Q 160 125 285 80 Q 160 40 35 80 Z`}
       fill={fill}
       opacity={0.9}
     />
-    {droops.map((d: any, i: number) => (
+    {droops.map((d, i: number) => (
       <path
         key={i}
         d={`M ${d.x - d.w} ${d.y} Q ${d.x} ${d.y + d.h} ${d.x + d.w} ${d.y} Z`}
@@ -567,7 +602,7 @@ const BunTopChive = () => (
 );
 
 // Map components directly
-export const SvgMap: Record<string, React.FC<any>> = {
+export const SvgMap: Record<string, React.FC> = {
   // Bun Bottoms
   brioche_bottom: BunBottomBrioche,
   sesame_bottom: BunBottomSesame,

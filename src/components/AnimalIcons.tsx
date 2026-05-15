@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React from 'react';
 
 // Minimal silhouette icons for each species — drawn in inline SVG paths.

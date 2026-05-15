@@ -1,16 +1,12 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, Sprout } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { SPECIES } from '../data/animalDeaths';
 import { ICONS_BY_SPECIES_ID } from './AnimalIcons';
 import { SourcesTooltip } from './SourcesTooltip';
 import { RotatingFact } from './RotatingFact';
 import { useCanvasAnimation, VIS } from '../hooks/useCanvasAnimation';
-
-interface AnimalDeathsScreenProps {
-  burgerState: Record<string, string | null>;
-  onBack: () => void;
-  onSwitchToPlant: () => void;
-}
+import { useBurgerStore } from '../store/useBurgerStore';
 
 function formatCount(n: number): string {
   if (n >= 1_000_000_000) return (n / 1_000_000_000).toFixed(2) + 'B';
@@ -19,11 +15,17 @@ function formatCount(n: number): string {
   return Math.floor(n).toString();
 }
 
-export const AnimalDeathsScreen = ({
-  burgerState,
-  onBack,
-  onSwitchToPlant,
-}: AnimalDeathsScreenProps) => {
+export const AnimalDeathsScreen = () => {
+  const navigate = useNavigate();
+  const { burgerState, setSlot, resetForBuilder } = useBurgerStore();
+
+  const onBack = () => navigate('/impact');
+  const onSwitchToPlant = () => {
+    setSlot('protein1', 'blackBeanPatty', 1);
+    resetForBuilder();
+    navigate('/build');
+  };
+
   const { canvasRef, wrapRef, elapsedSec, knifeProgress, showPlantCTA } =
     useCanvasAnimation();
 

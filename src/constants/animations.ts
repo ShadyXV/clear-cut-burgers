@@ -37,7 +37,7 @@ export const CHECKOUT_TIMELINE = {
   TEXT_START: 2500,
   TEXT_LINE_MS: [2650, 3150, 4000, 4700, 5250] as const,
   BUTTON: 6000,
-  REASSEMBLY_MS: 1400, // delay from button click → onComplete()
+  REASSEMBLY_MS: 600, // delay from button click → onComplete()
 } as const;
 
 // Shared layout constants

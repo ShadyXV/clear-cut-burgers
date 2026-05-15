@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, Skull } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { BURGER_SLOTS, INGREDIENTS } from '../data/ingredients';
 import { IMPACT_DATA, STAT_META, COMPARISON, StatKey } from '../data/impact';
 import { RotatingFact } from './RotatingFact';
@@ -8,6 +9,7 @@ import { SourcesTooltip } from './SourcesTooltip';
 import { IngredientRow } from './IngredientRow';
 import { useCountUp, formatValue } from '../utils/impact';
 import { SPRING, DUR } from '../constants/animations';
+import { useBurgerStore } from '../store/useBurgerStore';
 
 const STAT_KEYS: StatKey[] = [
   'co2',
@@ -18,19 +20,13 @@ const STAT_KEYS: StatKey[] = [
   'feed',
 ];
 
-interface ImpactScreenProps {
-  burgerState: Record<string, string | null>;
-  onBack: () => void;
-  onViewDeaths: () => void;
-  stagedEntry?: boolean;
-}
+export const ImpactScreen = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { burgerState, resetForBuilder } = useBurgerStore();
 
-export const ImpactScreen = ({
-  burgerState,
-  onBack,
-  onViewDeaths,
-  stagedEntry = false,
-}: ImpactScreenProps) => {
+  const stagedEntry = location.state?.stagedEntry || false;
+
   const [activeStat, setActiveStat] = useState<StatKey>('co2');
   const [barsReady, setBarsReady] = useState(!stagedEntry);
   const [chromeReady, setChromeReady] = useState(!stagedEntry);
@@ -44,6 +40,11 @@ export const ImpactScreen = ({
       clearTimeout(chromeTimer);
     };
   }, [stagedEntry]);
+
+  const onBack = () => {
+    resetForBuilder();
+    navigate('/build');
+  };
 
   const activeRows = BURGER_SLOTS.filter((s) => burgerState[s.id] !== null);
 

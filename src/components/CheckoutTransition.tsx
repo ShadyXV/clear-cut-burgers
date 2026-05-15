@@ -58,6 +58,7 @@ export const CheckoutTransition = ({
   onComplete,
 }: CheckoutTransitionProps) => {
   const [phase, setPhase] = useState<Phase>('arriving');
+  const [isAssembled, setIsAssembled] = useState(false);
   const [activeBites, setActiveBites] = useState(0);
   const [recoil, setRecoil] = useState(0);
   const [visibleLines, setVisibleLines] = useState(0);
@@ -75,6 +76,9 @@ export const CheckoutTransition = ({
     const startBlank = () => setPhase('blank');
     const startText = () => setPhase('text');
     const showBtn = () => setShowButton(true);
+
+    // Start assembling slightly after the hero starts moving down
+    t(() => setIsAssembled(true), 250);
 
     t(startBites, CHECKOUT_TIMELINE.BITES_START);
 
@@ -149,7 +153,7 @@ export const CheckoutTransition = ({
               <BurgerStack
                 burgerState={burgerState}
                 direction={1}
-                isAssembled={true}
+                isAssembled={isAssembled}
                 isCompact
               />
             </motion.div>

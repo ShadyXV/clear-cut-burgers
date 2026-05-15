@@ -9,7 +9,7 @@ export const SectionWrap = ({
   hint: string;
   children: React.ReactNode;
 }) => (
-  <div className="flex flex-col gap-3 px-6 py-3 h-full overflow-y-auto">
+  <div className="flex flex-col gap-5 px-6 py-6 mt-2 h-full overflow-y-auto">
     <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] text-center shrink-0">
       {hint}
     </p>

@@ -24,7 +24,7 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
   }, [isAssembling, onStart]);
 
   const scatteredLayers = useMemo(() => {
-    const activeLayers = BURGER_SLOTS.filter(slot => burgerState[slot.id]);
+    const activeLayers = BURGER_SLOTS.filter((slot) => burgerState[slot.id]);
 
     // Calculate total height for vertical centering during assembly
     const totalHeight = activeLayers.reduce((sum, slot) => {
@@ -42,16 +42,20 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
       // Scattered position logic
       const side = Math.floor(Math.random() * 4); // 0: top, 1: right, 2: bottom, 3: left
       let x, y;
-      if (side === 0) { // Top edge
+      if (side === 0) {
+        // Top edge
         x = 10 + Math.random() * 80;
         y = 8 + Math.random() * 12;
-      } else if (side === 1) { // Right edge
+      } else if (side === 1) {
+        // Right edge
         x = 82 + Math.random() * 8;
         y = 10 + Math.random() * 80;
-      } else if (side === 2) { // Bottom edge
+      } else if (side === 2) {
+        // Bottom edge
         x = 10 + Math.random() * 80;
         y = 82 + Math.random() * 8;
-      } else { // Left edge
+      } else {
+        // Left edge
         x = 10 + Math.random() * 8;
         y = 10 + Math.random() * 80;
       }
@@ -72,7 +76,7 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
         rotate: Math.random() * 90 - 45,
         delay: Math.random() * 2,
         duration: 8 + Math.random() * 4,
-        zIndex: 100 - BURGER_SLOTS.findIndex(s => s.id === slot.id),
+        zIndex: 100 - BURGER_SLOTS.findIndex((s) => s.id === slot.id),
       };
     });
   }, [burgerState]);
@@ -101,29 +105,37 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
               filter: layer.scale < 0.8 ? 'blur(1.5px)' : 'none',
             }}
             initial={{ x: '-50%', y: '-50%' }}
-            animate={isAssembling ? {
-              left: '50%',
-              top: `calc(50% + ${layer.assembledYOffset}px)`,
-              rotate: 0,
-              scale: 1.2, // Slightly larger for emphasis in center
-              opacity: 1,
-              filter: 'none',
-              y: '-50%',
-            } : {
-              y: ['-50%', '-60%', '-50%'],
-              rotate: [layer.rotate, layer.rotate + 15, layer.rotate],
-            }}
-            transition={isAssembling ? {
-              duration: 0.8,
-              ease: EASE.SNAPPY,
-              // Stagger the assembly from bottom to top
-              delay: (scatteredLayers.length - 1 - i) * 0.05,
-            } : {
-              duration: layer.duration,
-              repeat: Infinity,
-              delay: layer.delay,
-              ease: "easeInOut",
-            }}
+            animate={
+              isAssembling
+                ? {
+                    left: '50%',
+                    top: `calc(50% + ${layer.assembledYOffset}px)`,
+                    rotate: 0,
+                    scale: 1.2, // Slightly larger for emphasis in center
+                    opacity: 1,
+                    filter: 'none',
+                    y: '-50%',
+                  }
+                : {
+                    y: ['-50%', '-60%', '-50%'],
+                    rotate: [layer.rotate, layer.rotate + 15, layer.rotate],
+                  }
+            }
+            transition={
+              isAssembling
+                ? {
+                    duration: 0.8,
+                    ease: EASE.SNAPPY,
+                    // Stagger the assembly from bottom to top
+                    delay: (scatteredLayers.length - 1 - i) * 0.05,
+                  }
+                : {
+                    duration: layer.duration,
+                    repeat: Infinity,
+                    delay: layer.delay,
+                    ease: 'easeInOut',
+                  }
+            }
           >
             <IngredientSvg
               ingredientId={layer.id}
@@ -141,16 +153,22 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
       <motion.div
         className="relative flex flex-col items-center text-center px-10 max-w-xs gap-8"
         initial="initial"
-        animate={isAssembling ? { opacity: 0, scale: 0.95, transition: { duration: 0.4 } } : "animate"}
+        animate={
+          isAssembling
+            ? { opacity: 0, scale: 0.95, transition: { duration: 0.4 } }
+            : 'animate'
+        }
         variants={{
-          animate: { transition: { staggerChildren: 0.15, delayChildren: 0.3 } }
+          animate: {
+            transition: { staggerChildren: 0.15, delayChildren: 0.3 },
+          },
         }}
       >
         {/* Brand badge */}
         <motion.div
           variants={{
             initial: { opacity: 0, y: 20 },
-            animate: { opacity: 1, y: 0 }
+            animate: { opacity: 1, y: 0 },
           }}
           transition={SPRING.SMOOTH}
           className="flex items-center gap-2.5"
@@ -167,7 +185,7 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
         <motion.div
           variants={{
             initial: { opacity: 0, scale: 0.9, rotateX: -20 },
-            animate: { opacity: 1, scale: 1, rotateX: 0 }
+            animate: { opacity: 1, scale: 1, rotateX: 0 },
           }}
           transition={SPRING.HERO}
           className="flex flex-col gap-1"
@@ -184,7 +202,7 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
         <motion.p
           variants={{
             initial: { opacity: 0 },
-            animate: { opacity: 1 }
+            animate: { opacity: 1 },
           }}
           className="text-sm text-zinc-500 leading-relaxed"
         >
@@ -196,13 +214,15 @@ export const SplashScreen = ({ onStart, burgerState }: SplashScreenProps) => {
         <motion.div
           variants={{
             initial: { opacity: 0, y: 10 },
-            animate: { opacity: 1, y: 0 }
+            animate: { opacity: 1, y: 0 },
           }}
         >
           <motion.button
             onClick={() => setIsAssembling(true)}
             disabled={isAssembling}
-            whileHover={!isAssembling ? { scale: 1.04, backgroundColor: '#fbbf24' } : {}}
+            whileHover={
+              !isAssembling ? { scale: 1.04, backgroundColor: '#fbbf24' } : {}
+            }
             whileTap={!isAssembling ? { scale: 0.96 } : {}}
             transition={SPRING.BUTTON}
             className="px-9 py-3.5 bg-amber-500 text-zinc-950 font-black text-sm rounded-full tracking-wide transition-colors shadow-[0_8px_30px_rgba(245,158,11,0.25)] disabled:opacity-50 disabled:cursor-not-allowed"

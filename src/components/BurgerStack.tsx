@@ -26,7 +26,7 @@ export const BurgerStack = ({
 
   return (
     <div
-      className={`relative w-[340px] h-full flex flex-col items-center justify-end overflow-visible transition-all duration-700 ease-in-out ${isCompact ? 'pt-8 pb-6' : 'pt-32 pb-16'} ${isAssembled ? 'gap-y-0' : isCompact ? 'gap-y-[1.2rem]' : 'gap-y-[3.5rem]'}`}
+      className={`relative w-[340px] h-full flex flex-col items-center justify-end overflow-visible transition-all duration-700 ease-in-out ${isCompact ? 'pt-4 pb-0' : 'pt-32 pb-16'} ${isAssembled ? 'gap-y-0' : isCompact ? 'gap-y-[1.6rem]' : 'gap-y-[3.5rem]'}`}
     >
       <AnimatePresence>
         {BURGER_SLOTS.map((slot, index) => {

@@ -31,10 +31,11 @@ export default function App() {
   const [prevView, setPrevView] = useState<AppView>('builder');
   // isDeparting drives all departure animation; checkout overlay lives inside builder.
   const [isDeparting, setIsDeparting] = useState(false);
-  
+
   // Initialize with a random non-vegan burger
   const initialBurger = useMemo(() => generateRandomBurgerState(), []);
-  const [burgerState, setBurgerState] = useState<Record<string, string | null>>(initialBurger);
+  const [burgerState, setBurgerState] =
+    useState<Record<string, string | null>>(initialBurger);
 
   const navigateTo = (next: AppView) => {
     setPrevView(view);
@@ -53,7 +54,7 @@ export default function App() {
   };
 
   const slideDir = VIEW_DEPTH[view] > VIEW_DEPTH[prevView] ? 1 : -1;
-  const navLabel = view === 'builder' ? 'CHECKOUT — $18.50' : 'EDIT BURGER';
+  const navLabel = view === 'builder' ? 'ORDER NOW' : 'EDIT BURGER';
 
   const handleSlotChange = (
     slotId: SlotKey,
@@ -67,7 +68,9 @@ export default function App() {
   return (
     <div className="flex flex-col h-screen w-full bg-[#09090b] text-[#fafafa] overflow-hidden font-sans">
       {/* Background content is always rendered now to allow for shared layout transition */}
-      <div className={`flex flex-col h-full w-full transition-opacity duration-700 ${showSplash ? 'opacity-0' : 'opacity-100'}`}>
+      <div
+        className={`flex flex-col h-full w-full transition-opacity duration-700 ${showSplash ? 'opacity-0' : 'opacity-100'}`}
+      >
         {/* ── Nav — slides up gracefully at the start of checkout ── */}
         <motion.nav
           animate={{
@@ -82,7 +85,8 @@ export default function App() {
               B
             </div>
             <span className="text-lg font-semibold tracking-tight">
-              CLEAN CUT <span className="text-zinc-500 font-normal">BURGERS</span>
+              CLEAN CUT{' '}
+              <span className="text-zinc-500 font-normal">BURGERS</span>
             </span>
           </div>
           <div className="flex items-center gap-6">
@@ -114,18 +118,18 @@ export default function App() {
                 className="absolute inset-0 flex flex-col"
               >
                 {/* ── Burger preview ── */}
-                <div className="h-[44%] shrink-0 relative flex items-center justify-center bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-900 to-black overflow-hidden">
+                <div className="h-[54%] shrink-0 relative flex items-center justify-center bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-900 to-black overflow-hidden">
                   {/* Idle burger — fades as the hero takes over */}
                   <motion.div
                     animate={{ opacity: isDeparting ? 0 : 1 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute inset-0 flex justify-center items-end overflow-hidden pb-2"
+                    className="absolute inset-0 flex justify-center items-end overflow-hidden"
                   >
                     <motion.div layoutId="hero-burger">
                       <BurgerStack
                         burgerState={burgerState}
                         direction={direction}
-                        isAssembled={true}
+                        isAssembled={false}
                         isCompact
                       />
                     </motion.div>
@@ -157,7 +161,9 @@ export default function App() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ x: `${slideDir * -100}%`, opacity: 0 }}
                 transition={
-                  prevView === 'builder' ? { duration: DUR.IMPACT } : SPRING.VIEW
+                  prevView === 'builder'
+                    ? { duration: DUR.IMPACT }
+                    : SPRING.VIEW
                 }
                 className="absolute inset-0"
               >
@@ -212,10 +218,10 @@ export default function App() {
       {/* Splash overlay — sits above everything, slides up on dismiss */}
       <AnimatePresence>
         {showSplash && (
-          <SplashScreen 
-            key="splash" 
+          <SplashScreen
+            key="splash"
             burgerState={burgerState}
-            onStart={() => setShowSplash(false)} 
+            onStart={() => setShowSplash(false)}
           />
         )}
       </AnimatePresence>

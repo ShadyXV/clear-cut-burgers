@@ -31,7 +31,7 @@ export const BurgerEditor = ({ burgerState, onChangeSlot }: EditorProps) => {
   return (
     <div className="w-full flex-1 min-h-0 glass border-t border-zinc-800 flex flex-col z-50">
       {/* Tabs */}
-      <div className="flex overflow-x-auto px-4 pt-2 border-b border-zinc-800 no-scrollbar gap-1 shrink-0">
+      <div className="flex overflow-x-auto px-4 pt-1 border-b border-zinc-800 no-scrollbar gap-1 shrink-0">
         {CategoryTabs.map((tab) => (
           <button
             key={tab.id}

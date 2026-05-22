@@ -1,22 +1,63 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
-
 # Clean Cut Burgers
 
-Build your perfect burger — then find out what it actually costs.
+A high-fidelity, interactive burger-building experience designed to explore the composition of the perfect stack. Clean Cut Burgers combines a tactile interface with deep data integration, providing a precise look at the components that make up our food.
 
-You pick the bun, customize the protein, load up the toppings. It feels like a fun menu experience. Then you hit checkout, and the app shows you the land use, water, carbon, and animal toll behind what you just built. The environmental data is real (sourced from Poore & Nemecek 2018 and the FAO). The discomfort is intentional.
+## Features
 
-## Running it
+- **Interactive Stacking**: A physics-aware, visual builder that allows you to layer ingredients in real-time.
+- **Vast Ingredient Library**: Dozens of meticulously curated buns, proteins, cheeses, and toppings.
+- **Deep Data Integration**: Every ingredient is backed by extensive data points, drawing from authoritative sources such as Poore & Nemecek (2018), FAO slaughter statistics, and the Water Footprint Network.
+- **Dynamic Visualizations**: Modern, smooth transitions and data-driven graphics that provide insights into your creations.
+- **Precision Engineering**: Built with the latest web technologies for a fluid, application-like feel.
 
-You'll need Node.js installed.
+## Tech Stack
 
-```bash
-npm install
-npm run dev
-```
+- **Framework**: [React 19](https://react.dev/)
+- **Build Tool**: [Vite 6](https://vitejs.dev/)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **Animations**: [Motion](https://motion.dev/)
+- **State Management**: [Zustand](https://zustand-demo.pmnd.rs/)
+- **Routing**: [React Router 7](https://reactrouter.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
 
-## Stack
+## Data Sources
 
-React 19 · TypeScript · Vite · Tailwind v4 · Motion/React
+The insights provided in this application are derived from a meta-analysis of global food systems, including:
+- Poore & Nemecek (2018), *Science* — meta-analysis of 38,700 farms.
+- FAO global slaughter statistics (2023).
+- Our World in Data — Food & Environment.
+- Water Footprint Network.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/clean-cut-burgers.git
+   cd clean-cut-burgers
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Build for production:
+   ```bash
+   npm run build
+   ```
+
+## License
+
+MIT

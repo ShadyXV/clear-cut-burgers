@@ -99,7 +99,11 @@ export default function App() {
           opacity: isSplash || isCheckout ? 0 : 1,
         }}
         transition={{ duration: DUR.SLIDE, ease: EASE.SNAPPY }}
-        className="h-16 flex items-center justify-between px-8 border-b border-zinc-800 bg-zinc-950/50 relative z-50 shrink-0"
+        className={`h-16 flex items-center justify-between px-8 z-50 shrink-0 ${
+          view === 'build'
+            ? 'absolute inset-x-0 top-0'
+            : 'relative border-b border-zinc-800 bg-zinc-950/50'
+        }`}
       >
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center font-bold text-zinc-950">
@@ -155,10 +159,10 @@ export default function App() {
             style={{
               zIndex: isCheckout ? 40 : 10,
               position: 'absolute',
-              bottom: '50%',
+              bottom: view === 'build' ? '35%' : '50%',
             }}
             animate={{
-              y: view === 'build' ? '2vh' : isCheckout ? '50%' : '100vh',
+              y: view === 'build' ? '0vh' : isCheckout ? '0vh' : '100vh',
               scale: isCheckout ? 1.15 : 1,
               x: recoil * 8,
               opacity: view === 'build' ? 1 : isCheckout ? heroOpacity : 0,

@@ -3,14 +3,7 @@ import { SwipeCarousel } from '../SwipeCarousel';
 import { SectionWrap, AddButton, SlotDropdown } from './primitives';
 import { EditorProps } from './types';
 
-const TOPPING_SLOTS: SlotKey[] = [
-  'topping1',
-  'topping2',
-  'topping3',
-  'topping4',
-  'topping5',
-  'topping6',
-];
+const TOPPING_SLOTS: SlotKey[] = ['topping1', 'topping2'];
 
 export const ToppingSection = ({ burgerState, onChangeSlot }: EditorProps) => {
   const filledCount = TOPPING_SLOTS.filter((s) => burgerState[s]).length;
@@ -20,7 +13,7 @@ export const ToppingSection = ({ burgerState, onChangeSlot }: EditorProps) => {
     if (next) onChangeSlot(next, CATEGORIES.topping[0], 1);
   };
 
-  // Cascade-remove: when removing slot N, shift N+1..6 down by one
+  // Cascade-remove: when removing slot N, shift N+1 down by one
   const removeTopping = (slotId: SlotKey) => {
     const fromIdx = TOPPING_SLOTS.indexOf(slotId);
     for (let i = fromIdx; i < TOPPING_SLOTS.length; i++) {
@@ -60,7 +53,7 @@ export const ToppingSection = ({ burgerState, onChangeSlot }: EditorProps) => {
             />
           );
         })}
-        {burgerState.topping1 && filledCount < 6 && (
+        {burgerState.topping1 && filledCount < 2 && (
           <AddButton onClick={addTopping}>Add a Topping</AddButton>
         )}
       </div>

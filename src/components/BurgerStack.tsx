@@ -26,7 +26,7 @@ export const BurgerStack = ({
 
   return (
     <div
-      className={`relative w-[340px] h-full flex flex-col items-center justify-end overflow-visible transition-all duration-700 ease-in-out ${isCompact ? 'pt-4 pb-0' : 'pt-32 pb-16'} ${isAssembled ? 'gap-y-0' : isCompact ? 'gap-y-[1.6rem]' : 'gap-y-[3.5rem]'}`}
+      className={`relative w-[340px] h-[600px] flex flex-col items-center justify-end overflow-visible ${isCompact ? 'pb-0' : 'pb-16'} ${isAssembled ? 'gap-y-0' : isCompact ? 'gap-y-[1.6rem]' : 'gap-y-[3.5rem]'}`}
     >
       {BURGER_SLOTS.map((slot, index) => {
         const ingredientId = burgerState[slot.id];
@@ -36,6 +36,8 @@ export const BurgerStack = ({
         if (!item) return null;
 
         const baseZIndex = 100 - index;
+
+        const isSauce = item.category === 'sauce';
 
         if (staggerIn) {
           const visibleIndex = visibleSlots.findIndex((s) => s.id === slot.id);
@@ -50,7 +52,9 @@ export const BurgerStack = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay, duration: 0.45, ease: EASE.SNAPPY }}
             >
-              <div className="absolute bottom-0 w-full">
+              <div
+                className={`absolute bottom-0 w-full ${isSauce ? 'translate-y-[20px]' : ''}`}
+              >
                 <IngredientSvg
                   ingredientId={ingredientId}
                   isTopBun={slot.isTopBun}
@@ -82,7 +86,7 @@ export const BurgerStack = ({
                 animate="center"
                 exit="exit"
                 transition={SPRING.RESPONSIVE}
-                className="absolute bottom-0 w-full"
+                className={`absolute bottom-0 w-full ${isSauce ? 'translate-y-[20px]' : ''}`}
               >
                 <IngredientSvg
                   ingredientId={ingredientId}

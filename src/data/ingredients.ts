@@ -40,13 +40,13 @@ export const INGREDIENTS: Record<string, Ingredient> = {
     id: 'beefPatty',
     name: '100% Beef Patty',
     category: 'protein',
-    thickness: 15,
+    thickness: 16,
   },
   grilledChicken: {
     id: 'grilledChicken',
     name: 'Grilled Chicken',
     category: 'protein',
-    thickness: 12,
+    thickness: 16,
   },
   crispyChicken: {
     id: 'crispyChicken',
@@ -58,40 +58,40 @@ export const INGREDIENTS: Record<string, Ingredient> = {
     id: 'blackBeanPatty',
     name: 'Black Bean Patty',
     category: 'protein',
-    thickness: 14,
+    thickness: 16,
   },
   chickpeaPatty: {
     id: 'chickpeaPatty',
     name: 'Chickpea Patty',
     category: 'protein',
-    thickness: 13,
+    thickness: 16,
   },
   mushroomPatty: {
     id: 'mushroomPatty',
     name: 'Mushroom Patty',
     category: 'protein',
-    thickness: 13,
+    thickness: 16,
   },
 
   // Cheese
-  cheddar: { id: 'cheddar', name: 'Cheddar', category: 'cheese', thickness: 3 },
+  cheddar: { id: 'cheddar', name: 'Cheddar', category: 'cheese', thickness: 5 },
   cashewCheese: {
     id: 'cashewCheese',
     name: 'Cashew Cheese',
     category: 'cheese',
-    thickness: 3,
+    thickness: 5,
   },
   veganSmoked: {
     id: 'veganSmoked',
     name: 'Vegan Smoked',
     category: 'cheese',
-    thickness: 3,
+    thickness: 5,
   },
   emmental: {
     id: 'emmental',
     name: 'Emmental',
     category: 'cheese',
-    thickness: 3,
+    thickness: 5,
   },
   mozzarella: {
     id: 'mozzarella',
@@ -103,36 +103,36 @@ export const INGREDIENTS: Record<string, Ingredient> = {
     id: 'pepperCheese',
     name: 'Pepper Cheese',
     category: 'cheese',
-    thickness: 3,
+    thickness: 5,
   },
 
   // Toppings
-  tomato: { id: 'tomato', name: 'Tomato', category: 'topping', thickness: 6 },
+  tomato: { id: 'tomato', name: 'Tomato', category: 'topping', thickness: 8 },
   redOnion: {
     id: 'redOnion',
     name: 'Red Onion',
     category: 'topping',
-    thickness: 4,
+    thickness: 8,
   },
   whiteOnion: {
     id: 'whiteOnion',
     name: 'White Onion',
     category: 'topping',
-    thickness: 4,
+    thickness: 8,
   },
   friedOnion: {
     id: 'friedOnion',
     name: 'Fried Onions',
     category: 'topping',
-    thickness: 6,
+    thickness: 8,
   },
   pickles: {
     id: 'pickles',
     name: 'Pickles',
     category: 'topping',
-    thickness: 5,
+    thickness: 8,
   },
-  bacon: { id: 'bacon', name: 'Bacon', category: 'topping', thickness: 4 },
+  bacon: { id: 'bacon', name: 'Bacon', category: 'topping', thickness: 8 },
   pineapple: {
     id: 'pineapple',
     name: 'Pineapple',
@@ -149,13 +149,13 @@ export const INGREDIENTS: Record<string, Ingredient> = {
     id: 'jalapeno',
     name: 'Jalapeños',
     category: 'topping',
-    thickness: 4,
+    thickness: 8,
   },
   peppers: {
     id: 'peppers',
     name: 'Sweet Peppers',
     category: 'topping',
-    thickness: 4,
+    thickness: 8,
   },
 
   // Sauces
@@ -163,19 +163,19 @@ export const INGREDIENTS: Record<string, Ingredient> = {
     id: 'sauceMayo',
     name: 'Pepper Mayo',
     category: 'sauce',
-    thickness: 3,
+    thickness: 5,
   },
   sauceHabanero: {
     id: 'sauceHabanero',
     name: 'Habanero',
     category: 'sauce',
-    thickness: 3,
+    thickness: 5,
   },
   saucePiri: {
     id: 'saucePiri',
     name: 'Piri-Piri',
     category: 'sauce',
-    thickness: 3,
+    thickness: 5,
   },
 };
 
@@ -214,9 +214,9 @@ export const CATEGORIES: Record<Category, string[]> = {
 
 export type SlotKey =
   | 'bunTop'
-  | `topping${1 | 2 | 3 | 4 | 5 | 6}`
+  | `topping${1 | 2}`
   | `cheese${1 | 2}`
-  | `protein${1 | 2 | 3}`
+  | `protein${1 | 2}`
   | `sauceBottom`
   | 'bunBottom';
 
@@ -228,15 +228,10 @@ export const BURGER_SLOTS: {
   isBottomBun?: boolean;
 }[] = [
   { id: 'bunTop', label: 'Top Bun', category: 'bun', isTopBun: true },
-  { id: 'topping6', label: 'Topping 6', category: 'topping' },
-  { id: 'topping5', label: 'Topping 5', category: 'topping' },
-  { id: 'topping4', label: 'Topping 4', category: 'topping' },
-  { id: 'topping3', label: 'Topping 3', category: 'topping' },
   { id: 'topping2', label: 'Topping 2', category: 'topping' },
   { id: 'topping1', label: 'Topping 1', category: 'topping' },
   { id: 'cheese2', label: 'Extra Cheese', category: 'cheese' },
   { id: 'cheese1', label: 'Cheese', category: 'cheese' },
-  { id: 'protein3', label: 'Patty 3', category: 'protein' },
   { id: 'protein2', label: 'Patty 2', category: 'protein' },
   { id: 'protein1', label: 'Patty 1', category: 'protein' },
   { id: 'sauceBottom', label: 'Bottom Sauce', category: 'sauce' },
@@ -259,15 +254,10 @@ export const generateRandomBurgerState = (): Record<string, string | null> => {
 
   return {
     bunTop: bun,
-    topping6: null,
-    topping5: null,
-    topping4: null,
-    topping3: getRandom(CATEGORIES.topping),
     topping2: getRandom(CATEGORIES.topping),
     topping1: getRandom(CATEGORIES.topping),
     cheese2: null,
     cheese1: getRandom(CATEGORIES.cheese),
-    protein3: null,
     protein2: protein,
     protein1: protein,
     sauceBottom: getRandom(CATEGORIES.sauce),

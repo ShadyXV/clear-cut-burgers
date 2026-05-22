@@ -22,7 +22,7 @@ export const BurgerEditor = () => {
   const { burgerState, setSlot } = useBurgerStore();
 
   return (
-    <div className="absolute inset-x-0 bottom-0 h-1/2 glass border-t border-zinc-800 flex flex-col z-50">
+    <div className="absolute inset-x-0 bottom-0 h-[40vh] glass border-t border-zinc-800 flex flex-col z-50">
       {/* Tabs */}
       <div className="flex overflow-x-auto px-4 pt-1 border-b border-zinc-800 no-scrollbar gap-1 shrink-0">
         {CategoryTabs.map((tab) => (

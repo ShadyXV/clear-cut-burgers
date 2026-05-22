@@ -1,63 +1,82 @@
 # Clean Cut Burgers
 
-A high-fidelity, interactive burger-building experience designed to explore the composition of the perfect stack. Clean Cut Burgers combines a tactile interface with deep data integration, providing a precise look at the components that make up our food.
+Clean Cut Burgers is a small React app about building a burger and seeing what is behind it.
 
-## Features
+You pick the bun, protein, cheese, toppings, and sauce. The app then shows the estimated climate, water, land, methane, tree, and feed impact for the ingredients you chose. If the burger uses animal products, it can also show a live counter based on global slaughter data.
 
-- **Interactive Stacking**: A physics-aware, visual builder that allows you to layer ingredients in real-time.
-- **Vast Ingredient Library**: Dozens of meticulously curated buns, proteins, cheeses, and toppings.
-- **Deep Data Integration**: Every ingredient is backed by extensive data points, drawing from authoritative sources such as Poore & Nemecek (2018), FAO slaughter statistics, and the Water Footprint Network.
-- **Dynamic Visualizations**: Modern, smooth transitions and data-driven graphics that provide insights into your creations.
-- **Precision Engineering**: Built with the latest web technologies for a fluid, application-like feel.
+The point is not to make a perfect nutrition or climate calculator. It is a visual way to compare choices and make the hidden costs of a burger easier to notice.
 
-## Tech Stack
+## What It Does
 
-- **Framework**: [React 19](https://react.dev/)
-- **Build Tool**: [Vite 6](https://vitejs.dev/)
-- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
-- **Animations**: [Motion](https://motion.dev/)
-- **State Management**: [Zustand](https://zustand-demo.pmnd.rs/)
-- **Routing**: [React Router 7](https://reactrouter.com/)
-- **Icons**: [Lucide React](https://lucide.dev/)
+- Build a burger from a fixed list of ingredients.
+- Swap ingredients with a swipe-style picker and slot dropdowns.
+- Animate the burger as it moves from the builder into the results screens.
+- Show impact totals for the selected ingredients.
+- Compare different impact types, like CO2, water, land use, methane, trees, and feed.
+- Show animal death counters for meat-based choices.
+- Offer a plant-based switch when the current burger uses animal ingredients.
+
+## Data
+
+The app uses local data files in `src/data/`.
+
+- `ingredients.ts` defines the burger ingredients and slots.
+- `impact.ts` stores the impact values used by the results screen.
+- `animalDeaths.ts` stores the animal death counter data.
+- `facts.ts` stores the short rotating facts.
+
+These values are meant for comparison inside the app, not as exact totals for every real-world burger.
 
 ## Data Sources
 
-The insights provided in this application are derived from a meta-analysis of global food systems, including:
-- Poore & Nemecek (2018), *Science* — meta-analysis of 38,700 farms.
-- FAO global slaughter statistics (2023).
-- Our World in Data — Food & Environment.
-- Water Footprint Network.
+The app uses public food and agriculture datasets as a starting point:
 
-## Getting Started
+- Poore & Nemecek (2018), published in *Science*
+- FAO global slaughter statistics
+- Our World in Data food and environment datasets
+- Water Footprint Network
 
-### Prerequisites
+The numbers in the app are simplified so they work in a small interactive demo. They should be read as estimates, not exact measurements for every ingredient in every place.
 
-- Node.js (v18 or higher)
-- npm or yarn
+## Tech Stack
 
-### Installation
+- React 19
+- Vite
+- TypeScript
+- Tailwind CSS
+- Motion for animations
+- Zustand for burger state
+- React Router for the app screens
+- Lucide React for icons
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/clean-cut-burgers.git
-   cd clean-cut-burgers
-   ```
+## Run Locally
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+Install dependencies:
 
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
+```bash
+npm install
+```
 
-4. Build for production:
-   ```bash
-   npm run build
-   ```
+Start the dev server:
 
-## License
+```bash
+npm run dev
+```
 
-MIT
+Build the app:
+
+```bash
+npm run build
+```
+
+Format the source files:
+
+```bash
+npm run format
+```
+
+## Notes
+
+This is a single-page app. Most of the app behavior is in `src/App.tsx`, the burger data is in `src/data/`, and the visual pieces are in `src/components/`.
+
+There are no automated tests right now. `npm run build` is the main check for TypeScript and production build errors.

@@ -2,6 +2,9 @@
 
 Clean Cut Burgers is a small React app about building a burger and seeing what is behind it.
 
+<img width="3528" height="1960" alt="Screenshot 2026-05-22 at 23 46 58" src="https://github.com/user-attachments/assets/20cbb725-1c04-4856-943f-7c1642477d9e" />
+
+
 You pick the bun, protein, cheese, toppings, and sauce. The app then shows the estimated climate, water, land, methane, tree, and feed impact for the ingredients you chose. If the burger uses animal products, it can also show a live counter based on global slaughter data.
 
 The point is not to make a perfect nutrition or climate calculator. It is a visual way to compare choices and make the hidden costs of a burger easier to notice.

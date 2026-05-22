@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { SPRING } from '../constants/animations';
 import { INGREDIENTS } from '../data/ingredients';
 import { StatKey, STAT_META } from '../data/impact';
-import { SvgMap } from './ingredients/IngredientLibrary';
+import { SvgMap, PNG_MAP } from './ingredients/IngredientLibrary';
 import { useCountUp, formatValue } from '../utils/impact';
 
 const IngredientThumbnail = ({
@@ -13,10 +13,26 @@ const IngredientThumbnail = ({
   isTopBun?: boolean;
 }) => {
   const isBun = INGREDIENTS[ingredientId]?.category === 'bun';
-  const svgKey = isBun
+  const lookupId = isBun
     ? `${ingredientId}_${isTopBun ? 'top' : 'bottom'}`
     : ingredientId;
-  const SvgComp = SvgMap[svgKey];
+
+  const pngPath = PNG_MAP[lookupId];
+
+  if (pngPath) {
+    return (
+      <img
+        src={pngPath}
+        alt={lookupId}
+        width="72"
+        height="36"
+        className="object-contain"
+        style={{ filter: 'drop-shadow(0px 2px 3px rgba(0,0,0,0.4))' }}
+      />
+    );
+  }
+
+  const SvgComp = SvgMap[lookupId];
   if (!SvgComp) return <div className="w-[72px] h-9" />;
   return (
     <svg

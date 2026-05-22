@@ -9,8 +9,19 @@ import { SourcesTooltip } from './SourcesTooltip';
 import { SPRING, DUR } from '../constants/animations';
 import { useBurgerStore } from '../store/useBurgerStore';
 
-const STAT_KEYS: StatKey[] = ['co2', 'water', 'land', 'methane', 'trees', 'feed'];
-const PLANT_PROTEINS = new Set(['blackBeanPatty', 'chickpeaPatty', 'mushroomPatty']);
+const STAT_KEYS: StatKey[] = [
+  'co2',
+  'water',
+  'land',
+  'methane',
+  'trees',
+  'feed',
+];
+const PLANT_PROTEINS = new Set([
+  'blackBeanPatty',
+  'chickpeaPatty',
+  'mushroomPatty',
+]);
 
 export const CompareScreen = () => {
   const navigate = useNavigate();
@@ -73,7 +84,8 @@ export const CompareScreen = () => {
           WISELY.
         </h2>
         <p className="text-xs text-zinc-500 mt-1.5 leading-relaxed">
-          Here's what your choice spared the planet — versus the beef equivalent.
+          Here's what your choice spared the planet — versus the beef
+          equivalent.
         </p>
       </motion.div>
 
@@ -135,7 +147,9 @@ export const CompareScreen = () => {
             <div className="text-[8px] text-zinc-700 uppercase tracking-widest font-bold">
               saved
             </div>
-            <div className="text-xl font-black text-amber-400">{savingPct}%</div>
+            <div className="text-xl font-black text-amber-400">
+              {savingPct}%
+            </div>
             <div className="text-[8px] text-zinc-700 uppercase tracking-widest font-bold">
               less
             </div>
@@ -165,8 +179,14 @@ export const CompareScreen = () => {
             <motion.div
               className="absolute inset-y-0 left-0 bg-emerald-600/50 rounded-full"
               initial={{ width: 0 }}
-              animate={{ width: ready ? `${Math.max(veganFraction * 100, 1.5)}%` : 0 }}
-              transition={{ duration: 0.9, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              animate={{
+                width: ready ? `${Math.max(veganFraction * 100, 1.5)}%` : 0,
+              }}
+              transition={{
+                duration: 0.9,
+                delay: 0.35,
+                ease: [0.16, 1, 0.3, 1],
+              }}
             />
           </div>
           <div className="flex justify-between text-[9px] text-zinc-700 uppercase tracking-widest">
@@ -219,15 +239,15 @@ export const CompareScreen = () => {
               <div className="text-xs text-zinc-500 mt-0.5 leading-relaxed">
                 {plantProteinCount > 1
                   ? `${plantProteinCount} beef patties would have contributed to the slaughter of cattle.`
-                  : 'A beef patty would have contributed to the slaughter of a cattle.'}
-                {' '}
+                  : 'A beef patty would have contributed to the slaughter of a cattle.'}{' '}
                 9 are killed every second globally.
               </div>
             </div>
           </div>
           <div className="pt-1 border-t border-zinc-800/50">
             <p className="text-[10px] text-zinc-700 leading-relaxed">
-              ~9.47 cattle · 1,940 chickens · 46 pigs die globally every single second — 24 hours a day, 365 days a year.
+              ~9.47 cattle · 1,940 chickens · 46 pigs die globally every single
+              second — 24 hours a day, 365 days a year.
             </p>
           </div>
         </motion.div>

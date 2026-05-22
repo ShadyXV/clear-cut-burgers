@@ -321,23 +321,107 @@ const ChickpeaPatty = () => (
       <g>
         {/* Chickpea bumps */}
         <g fill="#DCBA82">
-          <ellipse cx="75" cy="78" rx="7" ry="3.5" transform="rotate(-8 75 78)" />
-          <ellipse cx="120" cy="65" rx="8" ry="4" transform="rotate(12 120 65)" />
-          <ellipse cx="165" cy="58" rx="7" ry="3.5" transform="rotate(-5 165 58)" />
-          <ellipse cx="215" cy="62" rx="8" ry="4" transform="rotate(15 215 62)" />
-          <ellipse cx="250" cy="75" rx="7" ry="3.5" transform="rotate(-10 250 75)" />
-          <ellipse cx="95" cy="93" rx="7" ry="3.5" transform="rotate(10 95 93)" />
-          <ellipse cx="145" cy="88" rx="8" ry="4" transform="rotate(-18 145 88)" />
-          <ellipse cx="195" cy="90" rx="7" ry="3.5" transform="rotate(8 195 90)" />
-          <ellipse cx="230" cy="95" rx="6" ry="3" transform="rotate(-6 230 95)" />
+          <ellipse
+            cx="75"
+            cy="78"
+            rx="7"
+            ry="3.5"
+            transform="rotate(-8 75 78)"
+          />
+          <ellipse
+            cx="120"
+            cy="65"
+            rx="8"
+            ry="4"
+            transform="rotate(12 120 65)"
+          />
+          <ellipse
+            cx="165"
+            cy="58"
+            rx="7"
+            ry="3.5"
+            transform="rotate(-5 165 58)"
+          />
+          <ellipse
+            cx="215"
+            cy="62"
+            rx="8"
+            ry="4"
+            transform="rotate(15 215 62)"
+          />
+          <ellipse
+            cx="250"
+            cy="75"
+            rx="7"
+            ry="3.5"
+            transform="rotate(-10 250 75)"
+          />
+          <ellipse
+            cx="95"
+            cy="93"
+            rx="7"
+            ry="3.5"
+            transform="rotate(10 95 93)"
+          />
+          <ellipse
+            cx="145"
+            cy="88"
+            rx="8"
+            ry="4"
+            transform="rotate(-18 145 88)"
+          />
+          <ellipse
+            cx="195"
+            cy="90"
+            rx="7"
+            ry="3.5"
+            transform="rotate(8 195 90)"
+          />
+          <ellipse
+            cx="230"
+            cy="95"
+            rx="6"
+            ry="3"
+            transform="rotate(-6 230 95)"
+          />
         </g>
         {/* Chickpea highlights */}
         <g fill="#EDD09A" opacity="0.7">
-          <ellipse cx="75" cy="76" rx="3.5" ry="1.5" transform="rotate(-8 75 76)" />
-          <ellipse cx="120" cy="63" rx="4" ry="1.7" transform="rotate(12 120 63)" />
-          <ellipse cx="165" cy="56" rx="3.5" ry="1.5" transform="rotate(-5 165 56)" />
-          <ellipse cx="215" cy="60" rx="4" ry="1.7" transform="rotate(15 215 60)" />
-          <ellipse cx="145" cy="86" rx="4" ry="1.7" transform="rotate(-18 145 86)" />
+          <ellipse
+            cx="75"
+            cy="76"
+            rx="3.5"
+            ry="1.5"
+            transform="rotate(-8 75 76)"
+          />
+          <ellipse
+            cx="120"
+            cy="63"
+            rx="4"
+            ry="1.7"
+            transform="rotate(12 120 63)"
+          />
+          <ellipse
+            cx="165"
+            cy="56"
+            rx="3.5"
+            ry="1.5"
+            transform="rotate(-5 165 56)"
+          />
+          <ellipse
+            cx="215"
+            cy="60"
+            rx="4"
+            ry="1.7"
+            transform="rotate(15 215 60)"
+          />
+          <ellipse
+            cx="145"
+            cy="86"
+            rx="4"
+            ry="1.7"
+            transform="rotate(-18 145 86)"
+          />
         </g>
         {/* Dark gaps */}
         <g fill="#6A4A28" opacity="0.6">
@@ -378,13 +462,55 @@ const MushroomPatty = () => (
       <g>
         {/* Dark mushroom cap fragments */}
         <g fill="#2A180E" opacity="0.85">
-          <ellipse cx="80" cy="74" rx="8" ry="3.5" transform="rotate(-15 80 74)" />
-          <ellipse cx="130" cy="62" rx="9" ry="4" transform="rotate(20 130 62)" />
-          <ellipse cx="175" cy="56" rx="7" ry="3.2" transform="rotate(-8 175 56)" />
-          <ellipse cx="225" cy="65" rx="8" ry="3.5" transform="rotate(18 225 65)" />
-          <ellipse cx="100" cy="92" rx="7" ry="3" transform="rotate(10 100 92)" />
-          <ellipse cx="150" cy="88" rx="9" ry="4" transform="rotate(-22 150 88)" />
-          <ellipse cx="205" cy="92" rx="7" ry="3.2" transform="rotate(12 205 92)" />
+          <ellipse
+            cx="80"
+            cy="74"
+            rx="8"
+            ry="3.5"
+            transform="rotate(-15 80 74)"
+          />
+          <ellipse
+            cx="130"
+            cy="62"
+            rx="9"
+            ry="4"
+            transform="rotate(20 130 62)"
+          />
+          <ellipse
+            cx="175"
+            cy="56"
+            rx="7"
+            ry="3.2"
+            transform="rotate(-8 175 56)"
+          />
+          <ellipse
+            cx="225"
+            cy="65"
+            rx="8"
+            ry="3.5"
+            transform="rotate(18 225 65)"
+          />
+          <ellipse
+            cx="100"
+            cy="92"
+            rx="7"
+            ry="3"
+            transform="rotate(10 100 92)"
+          />
+          <ellipse
+            cx="150"
+            cy="88"
+            rx="9"
+            ry="4"
+            transform="rotate(-22 150 88)"
+          />
+          <ellipse
+            cx="205"
+            cy="92"
+            rx="7"
+            ry="3.2"
+            transform="rotate(12 205 92)"
+          />
         </g>
         {/* Gill-like organic lines */}
         <g stroke="#2A180E" strokeWidth="1" fill="none" opacity="0.5">
@@ -396,10 +522,34 @@ const MushroomPatty = () => (
         </g>
         {/* Lighter cap highlights */}
         <g fill="#8A6040" opacity="0.55">
-          <ellipse cx="80" cy="72" rx="4" ry="1.5" transform="rotate(-15 80 72)" />
-          <ellipse cx="130" cy="60" rx="4.5" ry="1.8" transform="rotate(20 130 60)" />
-          <ellipse cx="175" cy="54" rx="3.5" ry="1.4" transform="rotate(-8 175 54)" />
-          <ellipse cx="150" cy="86" rx="4.5" ry="1.8" transform="rotate(-22 150 86)" />
+          <ellipse
+            cx="80"
+            cy="72"
+            rx="4"
+            ry="1.5"
+            transform="rotate(-15 80 72)"
+          />
+          <ellipse
+            cx="130"
+            cy="60"
+            rx="4.5"
+            ry="1.8"
+            transform="rotate(20 130 60)"
+          />
+          <ellipse
+            cx="175"
+            cy="54"
+            rx="3.5"
+            ry="1.4"
+            transform="rotate(-8 175 54)"
+          />
+          <ellipse
+            cx="150"
+            cy="86"
+            rx="4.5"
+            ry="1.8"
+            transform="rotate(-22 150 86)"
+          />
         </g>
         {/* Herb / thyme specks */}
         <g fill="#48681A" opacity="0.75">
@@ -814,6 +964,50 @@ export const SvgMap: Record<string, React.FC> = {
   saucePiri: SaucePiri,
 };
 
+export const PNG_MAP: Record<string, string> = {
+  // Bun Bottoms
+  brioche_bottom: '/images/brioche_bun_bottom.png',
+  sesame_bottom: '/images/sesame_bun_bottom.png',
+  paprika_bottom: '/images/paprika_bun_bottom.png',
+  cheeseTopped_bottom: '/images/brioche_bun_bottom.png',
+  chiveSesame_bottom: '/images/sesame_bun_bottom.png',
+  // Bun Tops
+  brioche_top: '/images/brioche_bun_top.png',
+  sesame_top: '/images/sesame_bun_top.png',
+  paprika_top: '/images/paprika_bun_top.png',
+  cheeseTopped_top: '/images/cheese_topped_bun_top.png',
+  chiveSesame_top: '/images/chive_sesame_bun_top.png',
+
+  beefPatty: '/images/beef_patty.png',
+  grilledChicken: '/images/grilled_chicken.png',
+  crispyChicken: '/images/crispy_chicken.png',
+  blackBeanPatty: '/images/black_bean_patty.png',
+  chickpeaPatty: '/images/chickpea_patty.png',
+  mushroomPatty: '/images/mushroom_patty.png',
+
+  cheddar: '/images/cheddar_cheese.png',
+  emmental: '/images/emmental_cheese.png',
+  pepperCheese: '/images/pepper_cheese.png',
+  mozzarella: '/images/mozzarella_cheese.png',
+  cashewCheese: '/images/cashew_cheese.png',
+  veganSmoked: '/images/vegan_smoked_cheese.png',
+
+  tomato: '/images/tomato.png',
+  redOnion: '/images/red_onion.png',
+  whiteOnion: '/images/white_onion.png',
+  friedOnion: '/images/fried_onions.png',
+  pickles: '/images/pickles.png',
+  bacon: '/images/bacon.png',
+  pineapple: '/images/pineapple.png',
+  guacamole: '/images/guacamole.png',
+  jalapeno: '/images/jalapenos.png',
+  peppers: '/images/sweet_peppers.png',
+
+  sauceMayo: '/images/pepper_mayo_pool.png',
+  sauceHabanero: '/images/habanero_sauce_pool.png',
+  saucePiri: '/images/piri_piri_sauce_pool.png',
+};
+
 export const IngredientSvg = ({
   ingredientId,
   isTopBun,
@@ -829,23 +1023,32 @@ export const IngredientSvg = ({
   if (isBun) {
     if (isTopBun) lookupId = `${ingredientId}_top`;
     else if (isBottomBun) lookupId = `${ingredientId}_bottom`;
-    // Failsafe rendering full bun if neither specified maybe? Just bottom.
     else lookupId = `${ingredientId}_bottom`;
   }
 
-  const SvgComponent = SvgMap[lookupId];
+  const pngPath = PNG_MAP[lookupId];
 
-  if (!SvgComponent) {
-    return null;
+  if (!pngPath) {
+    // Fallback to SVG if PNG is missing
+    const SvgComponent = SvgMap[lookupId];
+    if (!SvgComponent) return null;
+    return (
+      <svg
+        viewBox="0 0 320 160"
+        className="w-full h-auto drop-shadow-[0_4px_4px_rgba(0,0,0,0.3)] filter-drop-shadow"
+        style={{ filter: 'drop-shadow(0px 6px 6px rgba(0,0,0,0.25))' }}
+      >
+        <SvgComponent />
+      </svg>
+    );
   }
 
   return (
-    <svg
-      viewBox="0 0 320 160"
+    <img
+      src={pngPath}
+      alt={lookupId}
       className="w-full h-auto drop-shadow-[0_4px_4px_rgba(0,0,0,0.3)] filter-drop-shadow"
       style={{ filter: 'drop-shadow(0px 6px 6px rgba(0,0,0,0.25))' }}
-    >
-      <SvgComponent />
-    </svg>
+    />
   );
 };

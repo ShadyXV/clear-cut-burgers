@@ -2,10 +2,10 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { SPRING } from '../constants/animations';
 import { INGREDIENTS } from '../data/ingredients';
-import { SvgMap } from './ingredients/IngredientLibrary';
+import { SvgMap, PNG_MAP } from './ingredients/IngredientLibrary';
 
-// Height-constrained SVG renderer for the carousel (w-full h-auto clips; h-full w-auto fits)
-const CarouselSvg = ({
+// Height-constrained renderer for the carousel (w-full h-auto clips; h-full w-auto fits)
+const CarouselAsset = ({
   ingredientId,
   isTopBun,
 }: {
@@ -16,6 +16,20 @@ const CarouselSvg = ({
   const lookupId = isBun
     ? `${ingredientId}_${isTopBun ? 'top' : 'bottom'}`
     : ingredientId;
+
+  const pngPath = PNG_MAP[lookupId];
+
+  if (pngPath) {
+    return (
+      <img
+        src={pngPath}
+        alt={lookupId}
+        className="h-full w-auto max-w-full object-contain"
+        style={{ filter: 'drop-shadow(0px 4px 4px rgba(0,0,0,0.25))' }}
+      />
+    );
+  }
+
   const SvgComponent = SvgMap[lookupId];
   if (!SvgComponent) return null;
   return (
@@ -65,7 +79,7 @@ const IngredientCard = ({
     >
       {/* flex-1 min-h-0 gives this div a constrained height; SVG sizes from h-full, not width */}
       <div className="w-full flex-1 min-h-0 flex items-center justify-center overflow-hidden">
-        <CarouselSvg ingredientId={id} isTopBun={showTopBun} />
+        <CarouselAsset ingredientId={id} isTopBun={showTopBun} />
       </div>
       {full && ingredient && (
         <span className="text-[11px] font-bold text-zinc-300 text-center leading-tight shrink-0 px-1">

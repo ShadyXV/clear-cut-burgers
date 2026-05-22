@@ -14,7 +14,13 @@ import { SplashScreen } from './components/SplashScreen';
 import { useBurgerStore } from './store/useBurgerStore';
 import { isVeganBurger } from './utils/vegan';
 
-type AppView = 'splash' | 'build' | 'checkout' | 'compare' | 'impact' | 'deaths';
+type AppView =
+  | 'splash'
+  | 'build'
+  | 'checkout'
+  | 'compare'
+  | 'impact'
+  | 'deaths';
 
 const VIEW_DEPTH: Record<AppView, number> = {
   splash: 0,
@@ -100,8 +106,7 @@ export default function App() {
             B
           </div>
           <span className="text-lg font-semibold tracking-tight">
-            CLEAN CUT{' '}
-            <span className="text-zinc-500 font-normal">BURGERS</span>
+            CLEAN CUT <span className="text-zinc-500 font-normal">BURGERS</span>
           </span>
         </div>
         <div className="flex items-center gap-6">

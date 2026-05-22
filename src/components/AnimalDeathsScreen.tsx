@@ -26,7 +26,7 @@ export const AnimalDeathsScreen = () => {
     navigate('/build');
   };
 
-  const { canvasRef, wrapRef, elapsedSec, knifeProgress } =
+  const { canvasRef, wrapRef, elapsedSec, knifeProgress, showPlantCTA } =
     useCanvasAnimation();
 
   const activeIngs = new Set(
@@ -132,6 +132,24 @@ export const AnimalDeathsScreen = () => {
       {/* Canvas */}
       <div ref={wrapRef} className="flex-1 min-h-0 relative overflow-hidden">
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
+
+        <AnimatePresence>
+          {showPlantCTA && !isPlantBurger && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="absolute bottom-8 left-1/2 -translate-x-1/2 z-50 w-full px-12"
+            >
+              <button
+                onClick={onSwitchToPlant}
+                className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-black italic tracking-tight rounded-xl shadow-2xl shadow-emerald-900/40 transition-all active:scale-95 flex items-center justify-center gap-3 border-2 border-emerald-400/30"
+              >
+                <span className="text-lg uppercase">Switch to Plant-Based</span>
+                <ArrowLeft className="rotate-180" size={20} />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Animal icon row — fades during phase 4 */}
         <div
@@ -329,7 +347,6 @@ export const AnimalDeathsScreen = () => {
             </motion.svg>
           )}
         </AnimatePresence>
-
       </div>
 
       {/* Footer */}

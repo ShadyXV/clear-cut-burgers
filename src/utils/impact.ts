@@ -28,6 +28,7 @@ export function useCountUp(
 
 export function formatValue(val: number): string {
   if (val === 0) return '0';
+  if (val < 0.001) return '<0.001';
   if (val < 0.01) return val.toFixed(3);
   if (val < 0.1) return val.toFixed(2);
   if (val < 10) return val.toFixed(1);

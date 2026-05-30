@@ -5,7 +5,7 @@ Clean Cut Burgers is a small React app about building a burger and seeing what i
 <img width="3528" height="1960" alt="Screenshot 2026-05-22 at 23 46 58" src="https://github.com/user-attachments/assets/20cbb725-1c04-4856-943f-7c1642477d9e" />
 
 
-You pick the bun, protein, cheese, toppings, and sauce. The app then shows the estimated climate, water, land, methane, tree, and feed impact for the ingredients you chose. If the burger uses animal products, it can also show a live counter based on global slaughter data.
+You pick the bun, protein, cheese, toppings, and sauce. The app then shows the estimated climate, freshwater, land, methane, forest-opportunity, and upstream animal-feed impact for the ingredients you chose. If the burger uses animal products, it can also show a live counter based on global slaughter data.
 
 The point is not to make a perfect nutrition or climate calculator. It is a visual way to compare choices and make the hidden costs of a burger easier to notice.
 
@@ -15,7 +15,9 @@ The point is not to make a perfect nutrition or climate calculator. It is a visu
 - Swap ingredients with a swipe-style picker and slot dropdowns.
 - Animate the burger as it moves from the builder into the results screens.
 - Show impact totals for the selected ingredients.
-- Compare different impact types, like CO2, water, land use, methane, trees, and feed.
+- Compare different impact types, like CO2, freshwater, land use, methane, forest opportunity cost, and upstream animal feed.
+- Compare the selected burger with a plant-based version on the impact screen.
+- Switch between ingredient bars, plant-swap comparison, and hotspot views.
 - Show animal death counters for meat-based choices.
 - Offer a plant-based switch when the current burger uses animal ingredients.
 
@@ -35,9 +37,9 @@ These values are meant for comparison inside the app, not as exact totals for ev
 The app uses public food and agriculture datasets as a starting point:
 
 - Poore & Nemecek (2018), published in *Science*
+- Our World in Data food-footprint datasets for greenhouse gas emissions, land use, and freshwater withdrawals
+- Searchinger et al. (2018), processed by Our World in Data, for carbon opportunity costs
 - FAO global slaughter statistics
-- Our World in Data food and environment datasets
-- Water Footprint Network
 
 The numbers in the app are simplified so they work in a small interactive demo. They should be read as estimates, not exact measurements for every ingredient in every place.
 

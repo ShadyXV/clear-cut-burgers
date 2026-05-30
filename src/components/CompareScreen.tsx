@@ -3,20 +3,18 @@ import { motion } from 'motion/react';
 import { ArrowLeft, Sprout, Skull } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { BURGER_SLOTS } from '../data/ingredients';
-import { IMPACT_DATA, STAT_META, COMPARISON, StatKey } from '../data/impact';
+import {
+  IMPACT_DATA,
+  STAT_META,
+  COMPARISON,
+  STAT_KEYS,
+  StatKey,
+} from '../data/impact';
 import { formatValue } from '../utils/impact';
 import { SourcesTooltip } from './SourcesTooltip';
 import { SPRING, DUR } from '../constants/animations';
 import { useBurgerStore } from '../store/useBurgerStore';
 
-const STAT_KEYS: StatKey[] = [
-  'co2',
-  'water',
-  'land',
-  'methane',
-  'trees',
-  'feed',
-];
 const PLANT_PROTEINS = new Set([
   'blackBeanPatty',
   'chickpeaPatty',

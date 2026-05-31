@@ -44,6 +44,10 @@ export const SourcesTooltip = () => {
               opportunity costs for the forest/land proxy
             </li>
             <li>
+              Plant-patty land estimates use cooked-patty dry-crop equivalents,
+              checked against published plant-burger LCAs
+            </li>
+            <li>
               FAO global slaughter statistics for the animal-deaths screen
             </li>
             <li>

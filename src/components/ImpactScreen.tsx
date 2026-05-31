@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -18,6 +18,7 @@ import { SPRING, DUR } from '../constants/animations';
 import { useBurgerStore } from '../store/useBurgerStore';
 
 type ImpactView = 'bars' | 'plant' | 'hotspots';
+type BreakdownMode = 'bars' | 'circles';
 type ActiveRow = {
   slot: (typeof BURGER_SLOTS)[number];
   ingredientId: string;
@@ -84,6 +85,17 @@ const formatReductionPercent = (selected: number, comparison: number) => {
   const reductionPct = (reduction / selected) * 100;
 
   return formatSharePercent(reductionPct);
+};
+
+const getBubbleSizes = (selected: number, plant: number) => {
+  if (selected <= 0) return { selectedSize: 36, plantSize: 12 };
+
+  const plantRatio = Math.max(0, Math.min(1, plant / selected));
+  const reductionRatio = 1 - plantRatio;
+  const selectedSize = 30 + reductionRatio * 26;
+  const plantSize = Math.max(9, selectedSize * Math.sqrt(plantRatio));
+
+  return { selectedSize, plantSize };
 };
 
 export const ImpactScreen = () => {
@@ -355,6 +367,7 @@ const PlantComparisonView = ({
   swappedCount: number;
   onStatSelect: (stat: StatKey) => void;
 }) => {
+  const [breakdownMode, setBreakdownMode] = useState<BreakdownMode>('bars');
   const meta = STAT_META[activeStat];
   const selected = selectedTotals[activeStat];
   const plant = plantTotals[activeStat];
@@ -380,6 +393,8 @@ const PlantComparisonView = ({
         <p className="mt-2 max-w-[66ch] text-xs leading-relaxed text-zinc-500">
           Beef and chicken become plant patties, dairy cheese becomes vegan
           cheese, bacon becomes guacamole, and mayo becomes piri-piri sauce.
+          Percentages compare the whole burger, so unchanged buns, toppings, and
+          sauces remain in both columns.
         </p>
       </div>
 
@@ -410,76 +425,265 @@ const PlantComparisonView = ({
       </div>
 
       <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-4">
-        <div className="mb-3 flex items-baseline justify-between">
+        <div className="mb-3 flex items-start justify-between gap-3">
           <h3 className="text-xs font-black uppercase tracking-widest text-zinc-400">
             Side-by-side breakdown
           </h3>
-          <span className="text-[10px] text-zinc-600">
-            Plant is {formatSharePercent(plantPct)} of selected
-          </span>
+          <div className="flex shrink-0 flex-col items-end gap-2">
+            <span className="text-right text-[10px] text-zinc-600">
+              Plant is {formatSharePercent(plantPct)} of selected
+            </span>
+            <div className="flex rounded-full border border-zinc-800 bg-zinc-950 p-0.5">
+              {(['bars', 'circles'] as BreakdownMode[]).map((mode) => (
+                <button
+                  key={mode}
+                  onClick={() => setBreakdownMode(mode)}
+                  className={`rounded-full px-2.5 py-1 text-[9px] font-black uppercase tracking-wider transition-colors ${
+                    breakdownMode === mode
+                      ? 'bg-zinc-800 text-zinc-100'
+                      : 'text-zinc-600 hover:text-zinc-300'
+                  }`}
+                >
+                  {mode}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="space-y-3">
-          {STAT_KEYS.map((key) => {
-            const rowMeta = STAT_META[key];
-            const selectedValue = selectedTotals[key];
-            const plantValue = plantTotals[key];
-            const max = Math.max(selectedValue, plantValue, 0.001);
-            const rowReduction = formatReductionPercent(
-              selectedValue,
-              plantValue,
-            );
+        {breakdownMode === 'bars' ? (
+          <div className="space-y-3">
+            {STAT_KEYS.map((key) => {
+              const rowMeta = STAT_META[key];
+              const selectedValue = selectedTotals[key];
+              const plantValue = plantTotals[key];
+              const max = Math.max(selectedValue, plantValue, 0.001);
+              const rowReduction = formatReductionPercent(
+                selectedValue,
+                plantValue,
+              );
 
-            return (
-              <button
-                key={key}
-                onClick={() => onStatSelect(key)}
-                className={`w-full rounded-lg border p-3 text-left transition-colors ${
-                  activeStat === key
-                    ? 'border-zinc-600 bg-zinc-900'
-                    : 'border-zinc-900 bg-zinc-950 hover:border-zinc-700'
-                }`}
-              >
-                <div className="mb-2 flex items-center justify-between gap-3">
-                  <span
-                    className={`text-[11px] font-black uppercase tracking-wider ${rowMeta.color}`}
-                  >
-                    {rowMeta.label}
-                  </span>
-                  <span className="text-[10px] font-bold text-zinc-500">
-                    {rowReduction} lower
-                  </span>
-                </div>
-                <div className="grid grid-cols-[72px_1fr_52px] items-center gap-2 text-[10px] text-zinc-500">
-                  <span>Your burger</span>
-                  <div className="h-2 overflow-hidden rounded-full bg-zinc-900">
-                    <div
-                      className={`${rowMeta.barBg} h-full rounded-full`}
-                      style={{ width: `${getPct(selectedValue, max)}%` }}
-                    />
-                  </div>
-                  <span className="text-right tabular-nums text-zinc-300">
-                    {formatValue(selectedValue)}
-                  </span>
-
-                  <span>Plant</span>
-                  <div className="h-2 overflow-hidden rounded-full bg-zinc-900">
-                    <div
-                      className="h-full rounded-full bg-emerald-500"
-                      style={{ width: `${getPct(plantValue, max)}%` }}
-                    />
-                  </div>
-                  <span className="text-right tabular-nums text-zinc-300">
-                    {formatValue(plantValue)}
-                  </span>
-                </div>
-              </button>
-            );
-          })}
-        </div>
+              return (
+                <BarBreakdownRow
+                  key={key}
+                  active={activeStat === key}
+                  max={max}
+                  rowMeta={rowMeta}
+                  rowReduction={rowReduction}
+                  selectedValue={selectedValue}
+                  plantValue={plantValue}
+                  onClick={() => onStatSelect(key)}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <BubbleBreakdownBoard
+            activeStat={activeStat}
+            selectedTotals={selectedTotals}
+            plantTotals={plantTotals}
+            onStatSelect={onStatSelect}
+          />
+        )}
       </div>
     </div>
   );
 };
+
+const BreakdownRowShell = ({
+  active,
+  children,
+  onClick,
+}: {
+  active: boolean;
+  children: ReactNode;
+  onClick: () => void;
+}) => (
+  <button
+    onClick={onClick}
+    className={`w-full rounded-lg border p-3 text-left transition-colors ${
+      active
+        ? 'border-zinc-600 bg-zinc-900'
+        : 'border-zinc-900 bg-zinc-950 hover:border-zinc-700'
+    }`}
+  >
+    {children}
+  </button>
+);
+
+const BreakdownRowHeader = ({
+  rowMeta,
+  rowReduction,
+}: {
+  rowMeta: (typeof STAT_META)[StatKey];
+  rowReduction: string;
+}) => (
+  <div className="mb-2 flex items-center justify-between gap-3">
+    <span
+      className={`text-[11px] font-black uppercase tracking-wider ${rowMeta.color}`}
+    >
+      {rowMeta.label}
+    </span>
+    <span className="text-[10px] font-bold text-zinc-500">
+      {rowReduction} lower
+    </span>
+  </div>
+);
+
+const BarBreakdownRow = ({
+  active,
+  max,
+  rowMeta,
+  rowReduction,
+  selectedValue,
+  plantValue,
+  onClick,
+}: {
+  active: boolean;
+  max: number;
+  rowMeta: (typeof STAT_META)[StatKey];
+  rowReduction: string;
+  selectedValue: number;
+  plantValue: number;
+  onClick: () => void;
+}) => (
+  <BreakdownRowShell active={active} onClick={onClick}>
+    <BreakdownRowHeader rowMeta={rowMeta} rowReduction={rowReduction} />
+    <div className="grid grid-cols-[72px_1fr_52px] items-center gap-2 text-[10px] text-zinc-500">
+      <span>Your burger</span>
+      <div className="h-2 overflow-hidden rounded-full bg-zinc-900">
+        <div
+          className={`${rowMeta.barBg} h-full rounded-full`}
+          style={{ width: `${getPct(selectedValue, max)}%` }}
+        />
+      </div>
+      <span className="text-right tabular-nums text-zinc-300">
+        {formatValue(selectedValue)}
+      </span>
+
+      <span>Plant</span>
+      <div className="h-2 overflow-hidden rounded-full bg-zinc-900">
+        <div
+          className="h-full rounded-full bg-emerald-500"
+          style={{ width: `${getPct(plantValue, max)}%` }}
+        />
+      </div>
+      <span className="text-right tabular-nums text-zinc-300">
+        {formatValue(plantValue)}
+      </span>
+    </div>
+  </BreakdownRowShell>
+);
+
+const BubbleBreakdownBoard = ({
+  activeStat,
+  selectedTotals,
+  plantTotals,
+  onStatSelect,
+}: {
+  activeStat: StatKey;
+  selectedTotals: ImpactTotals;
+  plantTotals: ImpactTotals;
+  onStatSelect: (stat: StatKey) => void;
+}) => (
+  <div>
+    <p className="mb-3 text-[10px] leading-snug text-zinc-600">
+      One field, six comparisons. Big colored circles are your burger; green
+      dots are the plant swap for the same metric.
+    </p>
+    <div className="grid grid-cols-2 gap-x-3 gap-y-3 rounded-xl bg-zinc-900/35 p-2 sm:grid-cols-3">
+      {STAT_KEYS.map((key, index) => {
+        const rowMeta = STAT_META[key];
+        const selectedValue = selectedTotals[key];
+        const plantValue = plantTotals[key];
+        const rowReduction = formatReductionPercent(selectedValue, plantValue);
+        const { selectedSize, plantSize } = getBubbleSizes(
+          selectedValue,
+          plantValue,
+        );
+
+        return (
+          <button
+            key={key}
+            onClick={() => onStatSelect(key)}
+            className={`relative min-h-28 rounded-xl p-2 text-left transition-colors ${
+              activeStat === key ? 'bg-zinc-800/70' : 'hover:bg-zinc-900'
+            }`}
+          >
+            <div className="mb-2 flex items-start justify-between gap-2">
+              <span
+                className={`text-[10px] font-black uppercase tracking-wider ${rowMeta.color}`}
+              >
+                {rowMeta.label}
+              </span>
+              <span className="text-right text-[9px] font-bold text-zinc-500">
+                {rowReduction}
+              </span>
+            </div>
+
+            <div className="relative mx-auto h-16 max-w-24">
+              <motion.div
+                className={`${rowMeta.barBg} absolute bottom-0 left-1/2 rounded-full opacity-85 shadow-[0_0_22px_rgba(245,158,11,0.14)]`}
+                initial={{ scale: 0.82, opacity: 0 }}
+                animate={{ scale: 1, opacity: 0.85 }}
+                transition={{
+                  duration: 0.18,
+                  delay: index * 0.02,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                style={{
+                  width: selectedSize,
+                  height: selectedSize,
+                  marginLeft: -selectedSize / 2,
+                }}
+              />
+              <motion.div
+                className="absolute bottom-1 left-[68%] rounded-full bg-emerald-400 shadow-[0_0_18px_rgba(16,185,129,0.22)] ring-2 ring-zinc-950"
+                initial={{ scale: 0.82, opacity: 0 }}
+                animate={{ scale: 1, opacity: 0.95 }}
+                transition={{
+                  duration: 0.18,
+                  delay: index * 0.02 + 0.04,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                style={{
+                  width: plantSize,
+                  height: plantSize,
+                  marginLeft: -plantSize / 2,
+                }}
+              />
+            </div>
+
+            <div className="mt-1 grid grid-cols-2 gap-1 text-[9px] leading-tight">
+              <div className="min-w-0">
+                <div className="truncate font-bold text-zinc-400">
+                  {formatValue(selectedValue)}
+                </div>
+                <div className="truncate text-zinc-700">burger</div>
+              </div>
+              <div className="min-w-0 text-right">
+                <div className="truncate font-bold text-emerald-400">
+                  {formatValue(plantValue)}
+                </div>
+                <div className="truncate text-zinc-700">plant</div>
+              </div>
+            </div>
+          </button>
+        );
+      })}
+    </div>
+    <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-[9px] font-bold uppercase tracking-wider text-zinc-600">
+      <span className="inline-flex items-center gap-1.5">
+        <span className="h-2.5 w-2.5 rounded-full bg-amber-500" />
+        Your burger
+      </span>
+      <span className="inline-flex items-center gap-1.5">
+        <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+        Plant swap
+      </span>
+      <span>Size shows the gap within each metric</span>
+    </div>
+  </div>
+);
 
 const ImpactTotalCard = ({
   label,

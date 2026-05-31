@@ -42,6 +42,7 @@ The app uses public food and agriculture datasets as a starting point:
 - FAO global slaughter statistics
 
 The numbers in the app are simplified so they work in a small interactive demo. They should be read as estimates, not exact measurements for every ingredient in every place.
+Plant-patty land use is modeled as a cooked patty with dry-crop equivalents, not as 150g of dry beans or chickpeas.
 
 ## Tech Stack
 

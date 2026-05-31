@@ -23,8 +23,10 @@ export const STAT_KEYS: StatKey[] = [
 // values are simplified proxies so the UI labels them as estimates. The forest
 // proxy uses Searchinger et al. (2018) carbon opportunity costs, processed by OWID:
 // kg CO2e from native vegetation and soil carbon not restored while land produces food.
-// Serving assumptions: bun half 30g, patty 150g, cheese 30g, bacon 30g,
-// vegetables 20-40g, sauce 15g.
+// Serving assumptions: bun half 30g, animal patty 150g, cheese 30g, bacon 30g,
+// vegetables 20-40g, sauce 15g. Plant patties use a cooked-patty serving, not
+// 150g dry pulses. Their land values use dry-crop equivalents and are checked
+// against plant-burger LCAs reporting roughly 2.5-3.3 m²-year/kg land use.
 // Beef uses "Beef (beef herd)" because this app is illustrating a high-impact
 // burger patty. Chicken uses "Poultry Meat"; cheese uses "Cheese"; plant patties
 // use pulses, mushrooms, or vegetables as the closest OWID category.
@@ -100,26 +102,26 @@ export const IMPACT_DATA: Record<string, ImpactMetric> = {
   },
   blackBeanPatty: {
     co2: 0.22,
-    water: 52,
-    land: 1.87,
+    water: 18,
+    land: 0.47,
     methane: 0.01,
-    trees: 2.13,
+    trees: 0.43,
     feed: 0,
   },
   chickpeaPatty: {
     co2: 0.22,
-    water: 52,
-    land: 1.87,
+    water: 18,
+    land: 0.47,
     methane: 0.01,
-    trees: 0.56,
+    trees: 0.11,
     feed: 0,
   },
   mushroomPatty: {
     co2: 0.11,
-    water: 21,
-    land: 0.09,
+    water: 14,
+    land: 0.07,
     methane: 0.004,
-    trees: 0.11,
+    trees: 0.08,
     feed: 0,
   },
 

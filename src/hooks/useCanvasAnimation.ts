@@ -3,52 +3,48 @@ import { SPECIES } from '../data/animalDeaths';
 
 const VIS = [
   {
-    r: 146,
-    g: 64,
-    b: 14,
+    r: 148,
+    g: 18,
+    b: 18,
     initialLw: 1.0,
     thickenPerSec: 0.55,
     maxThickness: 26,
-    growPxPerSec: 32,
-    spawnPerSec: 4.5,
-    maxLines: 55,
-    glow: false,
+    growPxPerSec: 64,
+    spawnPerSec: 6.0,
+    maxLines: 180,
   },
   {
-    r: 110,
-    g: 35,
-    b: 65,
+    r: 112,
+    g: 9,
+    b: 22,
     initialLw: 0.9,
     thickenPerSec: 0.22,
     maxThickness: 18,
-    growPxPerSec: 17,
-    spawnPerSec: 2.5,
-    maxLines: 45,
-    glow: false,
+    growPxPerSec: 48,
+    spawnPerSec: 5.2,
+    maxLines: 160,
   },
   {
-    r: 185,
-    g: 70,
-    b: 105,
+    r: 176,
+    g: 24,
+    b: 38,
     initialLw: 1.1,
     thickenPerSec: 0.18,
     maxThickness: 18,
-    growPxPerSec: 14,
-    spawnPerSec: 2.0,
-    maxLines: 42,
-    glow: false,
+    growPxPerSec: 44,
+    spawnPerSec: 4.8,
+    maxLines: 150,
   },
   {
-    r: 220,
-    g: 38,
-    b: 38,
+    r: 219,
+    g: 46,
+    b: 46,
     initialLw: 1.4,
     thickenPerSec: 0.08,
     maxThickness: 16,
-    growPxPerSec: 9,
-    spawnPerSec: 1.2,
-    maxLines: 35,
-    glow: true,
+    growPxPerSec: 38,
+    spawnPerSec: 4.2,
+    maxLines: 130,
   },
 ];
 
@@ -66,8 +62,8 @@ interface GrowingLine {
   g: number;
   b: number;
   born: number;
-  glow: boolean;
-  colIdx: number;
+  fadeStart: number | null;
+  fadeMs: number;
 }
 
 function lerp(a: number, b: number, t: number): number {
@@ -86,15 +82,14 @@ export function useCanvasAnimation() {
     canvasW: 0,
     canvasH: 0,
     baselineY: 0,
-    knifeDripGrowth: 0,
   });
 
   const [mountTime] = useState(() => Date.now());
   const [, setTick] = useState(0);
 
-  // Force re-render every 200ms so elapsed-time-derived UI values stay live
+  // Keep text counters live without forcing canvas-adjacent UI to re-render constantly.
   useEffect(() => {
-    const id = setInterval(() => setTick((n) => n + 1), 200);
+    const id = setInterval(() => setTick((n) => n + 1), 500);
     return () => clearInterval(id);
   }, []);
 
@@ -110,26 +105,29 @@ export function useCanvasAnimation() {
       canvas.height = wrap.clientHeight;
       s.canvasW = canvas.width;
       s.canvasH = canvas.height;
-      s.baselineY = Math.round(canvas.height * 0.12);
+      s.baselineY = -Math.max(28, Math.round(canvas.height * 0.045));
     };
     resize();
     window.addEventListener('resize', resize);
 
-    const spawnLine = (colIdx: number, now: number) => {
+    const spawnLine = (colIdx: number, now: number, initialProgress = 0) => {
       const v = VIS[colIdx];
       const colW = s.canvasW / SPECIES.length;
       const pad = 4;
       const baseX = colIdx * colW + pad + Math.random() * (colW - pad * 2);
+      const maxGrowthPx = s.canvasH - s.baselineY + 90 + Math.random() * 60;
+      const progress = Math.max(0, Math.min(1, initialProgress));
+      const thicknessTarget = v.initialLw * (0.8 + Math.random() * 0.4);
       s.lines[colIdx].push({
         x: baseX,
         baseX,
-        growthPx: 0,
-        maxGrowthPx: s.canvasH - s.baselineY + 60,
+        growthPx: maxGrowthPx * progress,
+        maxGrowthPx,
         growPxPerMs: (v.growPxPerSec * (0.7 + Math.random() * 0.6)) / 1000,
-        thickness: v.initialLw * (0.8 + Math.random() * 0.4),
+        thickness: thicknessTarget,
         thickenPerMs: (v.thickenPerSec * (0.7 + Math.random() * 0.6)) / 1000,
         maxThickness: v.maxThickness,
-        alpha: 0,
+        alpha: progress > 0 ? 1 : 0,
         r: Math.max(
           0,
           Math.min(255, v.r + Math.floor((Math.random() - 0.5) * 22)),
@@ -143,20 +141,38 @@ export function useCanvasAnimation() {
           Math.min(255, v.b + Math.floor((Math.random() - 0.5) * 22)),
         ),
         born: now,
-        glow: v.glow,
-        colIdx,
+        fadeStart: null,
+        fadeMs: 3600 + Math.random() * 2200,
       });
     };
 
-    // Seed initial lines so screen isn't empty at t=0
+    const retireCoveredLine = (colIdx: number, now: number) => {
+      const lines = s.lines[colIdx];
+      const oldestComplete = lines.find(
+        (line) => line.fadeStart === null && line.growthPx >= line.maxGrowthPx,
+      );
+      if (oldestComplete) oldestComplete.fadeStart = now;
+    };
+
+    // Seed with staggered, already-grown strips so the screen never starts black.
     const seedNow = performance.now();
     SPECIES.forEach((_, colIdx) => {
-      const n = 6 + Math.floor(Math.random() * 4);
-      for (let i = 0; i < n; i++) spawnLine(colIdx, seedNow - i * 200);
+      const n = Math.round(VIS[colIdx].maxLines * 0.45);
+      for (let i = 0; i < n; i++) {
+        spawnLine(colIdx, seedNow - i * 120, Math.random());
+      }
     });
 
     const animate = (now: number) => {
-      const dt = Math.min(now - s.lastNow, 48);
+      if (document.hidden) {
+        rafRef.current = requestAnimationFrame(animate);
+        return;
+      }
+      if (now - s.lastNow < 33) {
+        rafRef.current = requestAnimationFrame(animate);
+        return;
+      }
+      const dt = Math.min(now - s.lastNow, 80);
       s.lastNow = now;
 
       const W = s.canvasW,
@@ -167,7 +183,7 @@ export function useCanvasAnimation() {
         elapsed < 10 ? 1 : elapsed < 22 ? 2 : elapsed < 40 ? 3 : 4;
       const kp = Math.max(0, Math.min(1, (elapsed - 40) / 25));
 
-      // Background tint — darkens toward deep red over time
+      // Background tint darkens toward deep red over time.
       const bgT = Math.min(1, elapsed / 45);
       ctx.fillStyle = `rgb(${Math.round(lerp(9, 12, bgT))},${Math.round(lerp(9, 6, bgT))},${Math.round(lerp(11, 6, bgT))})`;
       ctx.fillRect(0, 0, W, H);
@@ -196,26 +212,22 @@ export function useCanvasAnimation() {
         }
       }
 
-      // Baseline rule
-      ctx.strokeStyle = `rgba(255,255,255,${0.1 * (1 - kp * 0.5)})`;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(0, BY);
-      ctx.lineTo(W, BY);
-      ctx.stroke();
-
       // Spawn new lines
       SPECIES.forEach((_, colIdx) => {
         const v = VIS[colIdx];
         s.spawnAccum[colIdx] += (v.spawnPerSec * dt) / 1000;
         while (s.spawnAccum[colIdx] >= 1) {
           s.spawnAccum[colIdx] -= 1;
-          if (s.lines[colIdx].length < v.maxLines) spawnLine(colIdx, now);
+          if (s.lines[colIdx].length >= v.maxLines) {
+            retireCoveredLine(colIdx, now);
+          }
+          if (s.lines[colIdx].length < v.maxLines + 24) {
+            spawnLine(colIdx, now);
+          }
         }
       });
 
       // Draw drip lines
-      const cx = W / 2;
       SPECIES.forEach((_, colIdx) => {
         s.lines[colIdx].forEach((line) => {
           if (line.alpha < 1) line.alpha = Math.min(1, line.alpha + dt / 400);
@@ -230,28 +242,39 @@ export function useCanvasAnimation() {
               line.thickness + line.thickenPerMs * dt,
             );
 
-          // Phase 4: converge toward canvas centre
-          line.x = lerp(line.baseX, cx + (line.baseX - cx) * 0.3, kp);
+          line.x = line.baseX;
+
+          const fadeT =
+            line.fadeStart === null
+              ? 0
+              : Math.max(0, Math.min(1, (now - line.fadeStart) / line.fadeMs));
+          const renderAlpha = line.alpha * (1 - fadeT);
+          if (renderAlpha <= 0.01) return;
 
           const endY = BY + line.growthPx;
-          const grad = ctx.createLinearGradient(line.x, BY, line.x, endY);
-          grad.addColorStop(
-            0,
-            `rgba(${line.r},${line.g},${line.b},${line.alpha * 0.45})`,
+          const visibleTopY = Math.max(-40, BY);
+          const grad = ctx.createLinearGradient(
+            line.x,
+            visibleTopY,
+            line.x,
+            endY,
           );
           grad.addColorStop(
-            0.6,
-            `rgba(${line.r},${line.g},${line.b},${line.alpha * 0.8})`,
+            0,
+            `rgba(${line.r},${line.g},${line.b},${renderAlpha * 0.18})`,
+          );
+          grad.addColorStop(
+            0.35,
+            `rgba(${line.r},${line.g},${line.b},${renderAlpha * 0.8})`,
+          );
+          grad.addColorStop(
+            0.72,
+            `rgba(${Math.max(50, line.r - 38)},${Math.max(0, line.g - 20)},${Math.max(0, line.b - 20)},${renderAlpha * 0.88})`,
           );
           grad.addColorStop(
             1,
-            `rgba(${Math.min(255, line.r + 25)},${line.g},${line.b},${line.alpha * 0.92})`,
+            `rgba(${Math.max(60, line.r - 16)},${Math.max(0, line.g - 18)},${Math.max(0, line.b - 18)},${renderAlpha * 0.96})`,
           );
-
-          if (line.glow) {
-            ctx.shadowColor = `rgba(${line.r},${line.g},${line.b},0.6)`;
-            ctx.shadowBlur = 6;
-          } else ctx.shadowBlur = 0;
 
           ctx.beginPath();
           ctx.moveTo(line.x, BY);
@@ -261,43 +284,11 @@ export function useCanvasAnimation() {
           ctx.lineCap = 'round';
           ctx.stroke();
         });
-      });
-      ctx.shadowBlur = 0;
-
-      // Phase 4 central drip from knife tip (starts at t=50s)
-      if (elapsed >= 50) {
-        const dripStartT = elapsed - 50;
-        s.knifeDripGrowth = Math.min(H * 0.55, dripStartT * 6);
-        const dripTopY = BY + 14;
-        const dripBottomY = dripTopY + s.knifeDripGrowth;
-        const dripWidth = lerp(8, 14, Math.min(1, dripStartT / 20));
-
-        const dripGrad = ctx.createLinearGradient(
-          cx,
-          dripTopY,
-          cx,
-          dripBottomY,
+        s.lines[colIdx] = s.lines[colIdx].filter(
+          (line) =>
+            line.fadeStart === null || now - line.fadeStart < line.fadeMs,
         );
-        dripGrad.addColorStop(0, 'rgba(220, 38, 38, 0.6)');
-        dripGrad.addColorStop(0.5, 'rgba(220, 38, 38, 0.95)');
-        dripGrad.addColorStop(1, 'rgba(140, 12, 12, 1)');
-
-        ctx.beginPath();
-        ctx.moveTo(cx, dripTopY);
-        ctx.lineTo(cx, dripBottomY);
-        ctx.strokeStyle = dripGrad;
-        ctx.lineWidth = dripWidth;
-        ctx.lineCap = 'round';
-        ctx.shadowColor = 'rgba(220, 38, 38, 0.8)';
-        ctx.shadowBlur = 14;
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-
-        ctx.beginPath();
-        ctx.arc(cx, dripBottomY, dripWidth * 0.9, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(180, 22, 22, 0.95)';
-        ctx.fill();
-      }
+      });
 
       rafRef.current = requestAnimationFrame(animate);
     };
@@ -312,10 +303,8 @@ export function useCanvasAnimation() {
   }, [mountTime]);
 
   const elapsedSec = (Date.now() - mountTime) / 1000;
-  const knifeProgress = Math.max(0, Math.min(1, (elapsedSec - 40) / 25));
-  const showPlantCTA = elapsedSec >= 50;
 
-  return { canvasRef, wrapRef, elapsedSec, knifeProgress, showPlantCTA };
+  return { canvasRef, wrapRef, elapsedSec };
 }
 
 export { VIS };

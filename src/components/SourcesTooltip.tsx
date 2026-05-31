@@ -1,9 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 import { Info } from 'lucide-react';
 
-export const SourcesTooltip = () => {
+interface SourcesTooltipProps {
+  placement?: 'above' | 'below';
+  align?: 'left' | 'right';
+}
+
+export const SourcesTooltip = ({
+  placement = 'above',
+  align = 'left',
+}: SourcesTooltipProps) => {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const panelPosition =
+    placement === 'below' ? 'top-full mt-2' : 'bottom-full mb-2';
+  const panelAlign = align === 'right' ? 'right-0' : 'left-0';
 
   useEffect(() => {
     if (!open) return;
@@ -26,7 +37,9 @@ export const SourcesTooltip = () => {
         Sources
       </button>
       {open && (
-        <div className="absolute bottom-full left-0 z-30 mb-2 w-72 rounded-lg border border-zinc-700 bg-zinc-900 p-3 shadow-xl">
+        <div
+          className={`absolute ${panelPosition} ${panelAlign} z-30 w-72 rounded-lg border border-zinc-700 bg-zinc-900 p-3 shadow-xl`}
+        >
           <p className="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">
             Sources
           </p>
